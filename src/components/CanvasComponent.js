@@ -53,7 +53,6 @@ const Canvas = (props) => {
     const [filterClass, setFilterClass] = useState('');
 
     const [framePath, setFramePath] = useState('');
-    const [isFrameSelected, setFrameSelected] = useState(false);
 
     function handleTextChange(e) {
         setTextToInsert(e.target.value)
@@ -91,7 +90,6 @@ const Canvas = (props) => {
                         src={URL.createObjectURL(props.selectedPhoto)}
                         alt="SelectedImg" />
 
-                    {isFrameSelected ? <img className="frame-image" src={`${framePath}`} /> : <></>}
                     <img className="frame-image" src={`${framePath}`} />
                     
                     <p className="text-inside-image">{textToInsert}</p>
@@ -108,8 +106,7 @@ const Canvas = (props) => {
                     <Frames selectedPhoto={props.selectedPhoto}
                         framePath={framePath}
                         setFramePath={setFramePath}
-                        frameRow={{ frameRowOpen, setFrameRow }}
-                        frameDisplay={{ isFrameSelected, setFrameSelected }} />
+                        frameRow={{ frameRowOpen, setFrameRow }} />
                     :
                     <>
                     </>

@@ -5,9 +5,13 @@ import Canvas from './CanvasComponent';
 const PhotoEditor = (props) => {
 
     const [selectedPhoto, setSelectedPhoto] = useState();
+    const [imgSource, setImgSource] = useState('');
 
     function handleImageInputChange(e) {
         setSelectedPhoto(e.target.files[0]);
+        console.log(window.location.href);
+
+        //setImgSource("blob:http://lo")
     }
 
     function clearImage() {
