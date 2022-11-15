@@ -8,6 +8,13 @@ import Frames from "./FramesComponent";
 
 const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
 
+    function handleFramesClicked() {
+        frameRow.setFrameRow(!frameRow.frameRowOpen);
+        filterRow.setFiltersRow(false);
+        cropRow.setCropRow(false);
+        textRow.setTextRow(false);
+    }
+
     function handleFiltersClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(!filterRow.filtersRowOpen);
@@ -22,21 +29,14 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
         textRow.setTextRow(!textRow.textRowOpen);
     }
 
-    function handleFramesClicked() {
-        frameRow.setFrameRow(!frameRow.frameRowOpen);
-        filterRow.setFiltersRow(false);
-        cropRow.setCropRow(false);
-        textRow.setTextRow(false);
-    }
-
     return (
         <>
-            <div className="row" style={{ paddingTop: 10, rowGap: 10 }}>
-                <Button onClick={handleFramesClicked}><FontAwesomeIcon icon={faVectorSquare} /></Button>
-                <Button onClick={handleFiltersClicked}><FontAwesomeIcon icon={faWandMagicSparkles} /></Button>
-                <Button onClick={() => cropRow.setCropRow(!cropRow.cropRowOpen)}><FontAwesomeIcon icon={faScissors} /></Button>
-                <Button onClick={handleTextClicked}><FontAwesomeIcon icon={faFont} /> Text</Button>
-            </div>
+
+            <Button onClick={handleFramesClicked}><FontAwesomeIcon icon={faVectorSquare} /></Button>
+            <Button onClick={handleFiltersClicked}><FontAwesomeIcon icon={faWandMagicSparkles} /></Button>
+            <Button onClick={() => cropRow.setCropRow(!cropRow.cropRowOpen)}><FontAwesomeIcon icon={faScissors} /></Button>
+            <Button onClick={handleTextClicked}><FontAwesomeIcon icon={faFont} /> Text</Button>
+
         </>
     );
 }
@@ -53,6 +53,7 @@ const Canvas = (props) => {
     const [filterClass, setFilterClass] = useState('');
 
     const [framePath, setFramePath] = useState('');
+    const [isFrameSelected, setFrameSelected] = useState(false);
 
     function handleTextChange(e) {
         setTextToInsert(e.target.value)
@@ -89,10 +90,14 @@ const Canvas = (props) => {
                     <img className={`${filterClass} image`} style={{ objectFit: "cover" }}
                         src={URL.createObjectURL(props.selectedPhoto)}
                         alt="SelectedImg" />
+
+                    {isFrameSelected ? <img className="frame-image" src={`${framePath}`} /> : <></>}
                     <img className="frame-image" src={`${framePath}`} />
+                    
                     <p className="text-inside-image">{textToInsert}</p>
+
                 </div>
-                <div className='col-2'>
+                <div className='col-2' style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
                         filterRow={{ filtersRowOpen, setFiltersRow }}
                         cropRow={{ cropRowOpen, setCropRow }}
@@ -103,7 +108,8 @@ const Canvas = (props) => {
                     <Frames selectedPhoto={props.selectedPhoto}
                         framePath={framePath}
                         setFramePath={setFramePath}
-                        frameRow={{ frameRowOpen, setFrameRow }} />
+                        frameRow={{ frameRowOpen, setFrameRow }}
+                        frameDisplay={{ isFrameSelected, setFrameSelected }} />
                     :
                     <>
                     </>

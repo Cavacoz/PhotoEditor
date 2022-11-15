@@ -100,7 +100,7 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
                                                 <img
                                                     className={filter.class}
                                                     src={URL.createObjectURL(selectedPhoto)}
-                                                    height={100} width={100}
+                                                    height={100} width={150}
                                                     alt={filter.name}
                                                 />
                                             </div>
