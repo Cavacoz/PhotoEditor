@@ -85,7 +85,7 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow, frameDisplay
                                                 />
                                                 <img className="frame-image"
                                                     src={`${frame.src}`}
-                                                    height={100} width={100} />
+                                                    height={100} width={150} />
                                             </div>
                                             <div className="filter-item__name">
                                                 <p>
