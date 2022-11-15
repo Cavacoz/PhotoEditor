@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import './styles/instagram.css'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+
 import { Button } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,49 +23,29 @@ margin: auto;
 }
 `
 
-const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
+const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow, frameDisplay }) => {
 
-    const filters = [
+    const frames = [
         {
-            name: '1997',
-            class: 'filter-1997',
+            name: 'Christmas Red',
+            src: '../assets/images/christmasGreen.png'
         },
         {
-            name: 'Aden',
-            class: 'filter-aden',
+            name: 'Christmas Green',
+            src: '../assets/images/christmasRed.png'
         },
         {
-            name: 'Amaro',
-            class: 'filter-amaro',
+            name: 'We Are Friends',
+            src: '../assets/images/weAreFriends.png'
         },
         {
-            name: 'Ashby',
-            class: 'filter-ashby',
+            name: 'Happy Birthday',
+            src: '../assets/images/happyBirthday.png'
         },
         {
-            name: 'Brannan',
-            class: 'filter-brannan',
-        },
-        {
-            name: 'Brooklyn',
-            class: 'filter-brooklyn',
-        },
-        {
-            name: 'Charmes',
-            class: 'filter-charmes',
-        },
-        {
-            name: 'Clarendon',
-            class: 'filter-clarendon',
-        },
-        {
-            name: 'Crema',
-            class: 'filter-crema',
-        },
-        {
-            name: 'Dogpatch',
-            class: 'filter-dogpatch',
-        },
+            name: 'Halloween',
+            src: '../assets/images/halloween.png'
+        }
     ]
 
     const settings = {
@@ -76,12 +57,13 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
     }
 
     function handleCancelClick() {
-        setFilterClass('');
-        filterRow.setFiltersRow(false)
+        frameDisplay.setFrameSelected(false);
+        setFramePath('');
+        frameRow.setFrameRow(false);
     }
 
     function handleApplyClick() {
-        filterRow.setFiltersRow(false);
+        frameRow.setFrameRow(false);
     }
 
     return (
@@ -89,24 +71,25 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
             <div className="col-10 mt-3">
                 <FiltersStyles>
                     <Slider {...settings} >
-                        {filters.map((filter, index) => {
+                        {frames.map((frame, index) => {
                             return (
                                 <div key={index} style={{ paddingTop: 15 }}>
                                     <div
-                                        className={`filter-item ${filterClass === filter.class ? 'filter-item--selected' : ''}`}
-                                        onClick={() => setFilterClass(filter.class)}>
+                                        className={`filter-item ${framePath === frame.src ? 'filter-item--selected' : ''}`}
+                                        onClick={() => setFramePath(frame.src)}>
                                         <div>
                                             <div className="filter-item__img">
-                                                <img
-                                                    className={filter.class}
-                                                    src={URL.createObjectURL(selectedPhoto)}
+                                                <img src={URL.createObjectURL(selectedPhoto)}
                                                     height={100} width={150}
-                                                    alt={filter.name}
+                                                    alt={frame.name}
                                                 />
+                                                <img className="frame-image"
+                                                    src={`${frame.src}`}
+                                                    height={100} width={100} />
                                             </div>
                                             <div className="filter-item__name">
                                                 <p>
-                                                    <strong>{filter.name}</strong>
+                                                    <strong>{frame.name}</strong>
                                                 </p>
                                             </div>
                                         </div>
@@ -127,4 +110,4 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
     );
 }
 
-export default Filters;
+export default Frames;
