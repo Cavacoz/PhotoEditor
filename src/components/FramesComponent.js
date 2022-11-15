@@ -23,7 +23,7 @@ margin: auto;
 }
 `
 
-const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow, frameDisplay }) => {
+const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
 
     const frames = [
         {
@@ -57,7 +57,6 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow, frameDisplay
     }
 
     function handleCancelClick() {
-        //gitframeDisplay.setFrameSelected(false);
         setFramePath('');
         frameRow.setFrameRow(false);
     }
