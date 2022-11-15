@@ -45,6 +45,10 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
         {
             name: 'Halloween',
             src: '../assets/images/halloween.png'
+        },
+        {
+            name: 'Minnie and Mickey',
+            src: '../assets/images/minnieandmickey.png'
         }
     ]
 
