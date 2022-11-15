@@ -57,7 +57,7 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow, frameDisplay
     }
 
     function handleCancelClick() {
-        frameDisplay.setFrameSelected(false);
+        //gitframeDisplay.setFrameSelected(false);
         setFramePath('');
         frameRow.setFrameRow(false);
     }
