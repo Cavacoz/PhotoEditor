@@ -37,6 +37,11 @@ fix sizing and change color
   border-radius: 10px;
 }
 
+.filter-item__img{
+  width: 100%;
+  height: 100%;
+}
+
 .top-wrapper-image{
     height: 100%;
     position: relative;

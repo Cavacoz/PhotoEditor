@@ -23,7 +23,7 @@ margin: auto;
 }
 `
 
-const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
+const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow, frameDisplay }) => {
 
     const frames = [
         {
@@ -57,8 +57,9 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
     }
 
     function handleCancelClick() {
+        frameDisplay.setFrameSelected(false);
         setFramePath('');
-        frameRow.setFrameRow(false)
+        frameRow.setFrameRow(false);
     }
 
     function handleApplyClick() {
@@ -79,7 +80,7 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
                                         <div>
                                             <div className="filter-item__img">
                                                 <img src={URL.createObjectURL(selectedPhoto)}
-                                                    height={100} width={100}
+                                                    height={100} width={150}
                                                     alt={frame.name}
                                                 />
                                                 <img className="frame-image"
