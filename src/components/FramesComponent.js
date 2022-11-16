@@ -39,10 +39,6 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
             src: '../assets/images/weAreFriends.png'
         },
         {
-            name: 'Happy Birthday',
-            src: '../assets/images/happyBirthday.png'
-        },
-        {
             name: 'Halloween',
             src: '../assets/images/halloween.png'
         },
@@ -74,9 +70,9 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
             <div className="col-10 mt-3">
                 <FiltersStyles>
                     <Slider {...settings} >
-                        {frames.map((frame, index) => {
+                        {frames.map((frame) => {
                             return (
-                                <div key={index} style={{ paddingTop: 15 }}>
+                                <div key={frame.name} style={{ paddingTop: 15 }}>
                                     <div
                                         className={`filter-item ${framePath === frame.src ? 'filter-item--selected' : ''}`}
                                         onClick={() => setFramePath(frame.src)}>
