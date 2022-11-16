@@ -8,8 +8,8 @@ const PhotoEditor = (props) => {
     const [imgSource, setImgSource] = useState('');
 
     function handleImageInputChange(e) {
+        //TODO change this to a string
         setSelectedPhoto(e.target.files[0]);
-        console.log(window.location.href);
 
         //setImgSource("blob:http://lo")
     }

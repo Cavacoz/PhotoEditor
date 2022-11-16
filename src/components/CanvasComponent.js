@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Button, Input, Label } from "reactstrap";
-import Filters from "./FiltersComponent";
+
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVectorSquare, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import Frames from "./FramesComponent";
+import Filters from "./FiltersComponent";
 
 const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
 
@@ -98,7 +99,14 @@ const Canvas = (props) => {
                         src={URL.createObjectURL(props.selectedPhoto)}
                         alt="SelectedImg" />
 
-                    <img className="frame-image" src={`${framePath}`} />
+                    {framePath !== '' ?
+                        <>
+                            <img className="frame-image" src={`${framePath}`} />
+                        </>
+                        :
+                        <>
+                        </>
+                    }
 
                     <p className={`${textPosition}`} style={{ color: `${textColor}` }}>{textToInsert}</p>
 
@@ -135,7 +143,7 @@ const Canvas = (props) => {
                         <>
                             <div className="mt-2" style={{ display: "flex", flexDirection: "row", alignItems: "center", columnGap: 10 }}>
                                 <Label><strong>Text</strong></Label>
-                                <Input type="text" onChange={handleTextChange} />
+                                <Input maxLength={10} type="text" onChange={handleTextChange} />
 
                                 <Label><strong>Text color</strong></Label>
                                 <Input type="color" name="color" id="exampleColor" placeholder="color placeholder" value={textColor} onChange={handleColorChange} />
