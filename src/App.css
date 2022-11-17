@@ -29,9 +29,6 @@
   padding: 25px;
 }
 
-/**
-fix sizing and change color
-*/
 .filter-item--selected {
   background-color: rgba(56, 56, 255, 0.2);
   border-radius: 10px;

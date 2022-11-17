@@ -23,7 +23,7 @@ margin: auto;
 }
 `
 
-const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
+const Frames = ({ imgSource, framePath, setFramePath, frameRow }) => {
 
     const frames = [
         {
@@ -75,16 +75,17 @@ const Frames = ({ selectedPhoto, framePath, setFramePath, frameRow }) => {
                                 <div key={frame.name} style={{ paddingTop: 15 }}>
                                     <div
                                         className={`filter-item ${framePath === frame.src ? 'filter-item--selected' : ''}`}
+                                        style={{marginLeft: 2}}
                                         onClick={() => setFramePath(frame.src)}>
                                         <div>
                                             <div className="filter-item__img">
-                                                <img src={URL.createObjectURL(selectedPhoto)}
-                                                    height={100} width={150}
+                                                <img src={imgSource}
+                                                    height={100} width={145}
                                                     alt={frame.name}
                                                 />
                                                 <img className="frame-image"
                                                     src={`${frame.src}`}
-                                                    height={100} width={150} />
+                                                    height={100} width={145} />
                                             </div>
                                             <div className="filter-item__name">
                                                 <p>

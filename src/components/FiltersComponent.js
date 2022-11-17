@@ -22,7 +22,7 @@ margin: auto;
 }
 `
 
-const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
+const Filters = ({ imgSource, filterClass, setFilterClass, filterRow, canvas, canvasDimensions }) => {
 
     const filters = [
         {
@@ -67,6 +67,29 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
         },
     ]
 
+    const filters1 = [
+        {
+            name: 'Contrast',
+            effects: 'contrast(1.4)'
+        },
+        {
+            name: 'Sepia',
+            effects: 'sepia(1)'
+        },
+        {
+            name: 'Blur',
+            effects: 'blur(4px)'
+        },
+        {
+            name: 'Contrast&Sepia',
+            effects: 'contrast(1.4) sepia(1)'
+        },
+        {
+            name: 'Blur&Sepia',
+            effects: 'blur(4px) sepia(1) '
+        }
+    ]
+
     const settings = {
         dots: false,
         Infinite: true,
@@ -76,7 +99,21 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
     }
 
     function handleCancelClick() {
-        setFilterClass('');
+        setFilterClass(undefined);
+        var img = new Image();
+        img.src = imgSource;
+        const ctx = canvas.current.getContext('2d');
+        ctx.clearRect(0, 0, canvasDimensions.CANVAS_WITDH, canvasDimensions.CANVAS_HEIGHT)
+        var hRatio = canvasDimensions.CANVAS_WITDH / img.naturalWidth;
+        var vRatio = canvasDimensions.CANVAS_HEIGHT / img.naturalHeight;
+        var ratio = Math.min(hRatio, vRatio);
+        var centerShift_x = (canvasDimensions.CANVAS_WITDH - img.naturalWidth * ratio) / 2;
+        var centerShift_y = (canvasDimensions.CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
+        ctx.drawImage(img,
+            0, 0, img.naturalWidth, img.naturalHeight,
+            centerShift_x, centerShift_y,
+            img.naturalWidth * ratio, img.naturalHeight * ratio)
+
         filterRow.setFiltersRow(false)
     }
 
@@ -89,18 +126,19 @@ const Filters = ({ selectedPhoto, filterClass, setFilterClass, filterRow }) => {
             <div className="col-10 mt-3">
                 <FiltersStyles>
                     <Slider {...settings} >
-                        {filters.map((filter, index) => {
+                        {filters1.map((filter, index) => {
                             return (
                                 <div key={index} style={{ paddingTop: 15 }}>
                                     <div
-                                        className={`filter-item ${filterClass === filter.class ? 'filter-item--selected' : ''}`}
-                                        onClick={() => setFilterClass(filter.class)}>
+                                        className={`filter-item ${filterClass === filter.effects ? 'filter-item--selected' : ''}`}
+
+                                        onClick={() => setFilterClass(filter.effects)}>
                                         <div>
                                             <div className="filter-item__img">
                                                 <img
-                                                    className={filter.class}
-                                                    src={URL.createObjectURL(selectedPhoto)}
-                                                    height={100} width={148}
+                                                    style={{ filter: filter.effects }}
+                                                    src={imgSource}
+                                                    height={100} width={150}
                                                     alt={filter.name}
                                                 />
                                             </div>
