@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Label } from "reactstrap";
-
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVectorSquare, faShareNodes } from "@fortawesome/free-solid-svg-icons";
@@ -51,9 +50,46 @@ const Canvas = (props) => {
     const [cropRowOpen, setCropRow] = useState(false);
     const [textRowOpen, setTextRow] = useState(false);
 
-    const [filterClass, setFilterClass] = useState('');
-
+    const [filterClass, setFilterClass] = useState(undefined);
     const [framePath, setFramePath] = useState('');
+
+    const canvas = useRef(null);
+
+    const CANVAS_WITDH = 1000;
+    const CANVAS_HEIGHT = 500
+
+    const img = new Image();
+    img.src = props.imgSource;
+
+    useEffect(() => {
+        const ctx = canvas.current.getContext('2d');
+        var hRatio = CANVAS_WITDH / img.naturalWidth;
+        var vRatio = CANVAS_HEIGHT / img.naturalHeight;
+        var ratio = Math.min(hRatio, vRatio);
+        var centerShift_x = (CANVAS_WITDH - img.naturalWidth * ratio) / 2;
+        var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
+        img.onload = function () {
+            ctx.drawImage(img,
+                0, 0, img.naturalWidth, img.naturalHeight,
+                centerShift_x, centerShift_y,
+                img.naturalWidth * ratio, img.naturalHeight * ratio)
+        }
+    }, [img])
+
+    useEffect(() => {
+        const ctx = canvas.current.getContext('2d');
+        ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT)
+        ctx.filter = filterClass;
+        var hRatio = CANVAS_WITDH / img.naturalWidth;
+        var vRatio = CANVAS_HEIGHT / img.naturalHeight;
+        var ratio = Math.min(hRatio, vRatio);
+        var centerShift_x = (CANVAS_WITDH - img.naturalWidth * ratio) / 2;
+        var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
+        ctx.drawImage(img,
+            0, 0, img.naturalWidth, img.naturalHeight,
+            centerShift_x, centerShift_y,
+            img.naturalWidth * ratio, img.naturalHeight * ratio)
+    }, [filterClass])
 
     function handleTextChange(e) {
         setTextToInsert(e.target.value);
@@ -71,12 +107,19 @@ const Canvas = (props) => {
         props.clearImage();
     }
 
+    const downloadImage = (e) => {
+        let link = e.currentTarget;
+        link.setAttribute('download', 'test.png');
+        let image = canvas.current.toDataURL('image/png');
+        link.setAttribute('href', image);
+    }
+
     return (
         <>
             <div className="row" style={{ textAlign: "left" }}>
                 <div className="col-10">
                     <h3>Image Name: </h3>
-                    <h5>{props.selectedPhoto.name}</h5>
+                    <h5>{props.imgName}</h5>
                 </div>
                 <div className="col-2" style={{
                     display: "flex",
@@ -85,7 +128,7 @@ const Canvas = (props) => {
                     height: 40, columnGap: 10
                 }}>
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    <Button><FontAwesomeIcon icon={faFloppyDisk} /></Button>
+                    <a id="download_image" href="some_link" onClick={downloadImage}>Download</a>
                     <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
                 </div>
 
@@ -95,9 +138,7 @@ const Canvas = (props) => {
 
                 <div className='col-10 top-wrapper-image'>
 
-                    <img className={`${filterClass} image`} style={{ objectFit: "cover" }}
-                        src={URL.createObjectURL(props.selectedPhoto)}
-                        alt="SelectedImg" />
+                    <canvas className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
 
                     {framePath !== '' ?
                         <>
@@ -120,7 +161,7 @@ const Canvas = (props) => {
 
                 <div className="row">
                     {frameRowOpen ?
-                        <Frames selectedPhoto={props.selectedPhoto}
+                        <Frames imgSource={props.imgSource}
                             framePath={framePath}
                             setFramePath={setFramePath}
                             frameRow={{ frameRowOpen, setFrameRow }} />
@@ -130,10 +171,12 @@ const Canvas = (props) => {
                     }
 
                     {filtersRowOpen ?
-                        <Filters selectedPhoto={props.selectedPhoto}
+                        <Filters imgSource={props.imgSource}
                             filterClass={filterClass}
                             setFilterClass={setFilterClass}
-                            filterRow={{ filtersRowOpen, setFiltersRow }} />
+                            filterRow={{ filtersRowOpen, setFiltersRow }}
+                            canvas={canvas}
+                            canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }} />
                         :
                         <>
                         </>

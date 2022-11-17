@@ -4,18 +4,16 @@ import Canvas from './CanvasComponent';
 
 const PhotoEditor = (props) => {
 
-    const [selectedPhoto, setSelectedPhoto] = useState();
     const [imgSource, setImgSource] = useState('');
+    const [imgName, setImageName] = useState('');
 
     function handleImageInputChange(e) {
-        //TODO change this to a string
-        setSelectedPhoto(e.target.files[0]);
-
-        //setImgSource("blob:http://lo")
+        setImgSource(URL.createObjectURL(e.target.files[0]).toString());
+        setImageName(e.target.files[0].name)
     }
 
     function clearImage() {
-        setSelectedPhoto(undefined);
+        setImgSource('');
     }
 
     return (
@@ -25,9 +23,9 @@ const PhotoEditor = (props) => {
                     <h1>Editor</h1>
                 </div>
                 <hr />
-                {selectedPhoto !== undefined ?
+                {imgSource ?
                     <div className="container">
-                        <Canvas selectedPhoto={selectedPhoto} clearImage={clearImage} />
+                        <Canvas imgName={imgName} imgSource={imgSource} clearImage={clearImage} />
                     </div>
                     :
                     <>
