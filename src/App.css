@@ -13,11 +13,11 @@
   }
 }
 
-.header{
+.header {
   background-color: rgba(0, 0, 255, .2);
 }
 
-.login-form{
+.login-form {
   border: 2px solid rgba(0, 0, 255, .2);
   border-radius: 10px;
   width: 650px;
@@ -34,34 +34,40 @@
   border-radius: 10px;
 }
 
-.filter-item__img{
+.filter-item__img {
   width: 100%;
   height: 100%;
 }
 
-.top-wrapper-image{
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+.top-wrapper-image {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .image {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.image-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .text-inside-image-center {
-    font-size: 25px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    word-wrap: break-word;
-    width: fit-content;
-    height: fit-content;
-    margin: auto;
+  font-size: 25px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  word-wrap: break-word;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
 }
 
 .text-inside-image-topleft {
@@ -119,7 +125,7 @@
   margin: auto;
 }
 
-.filter-row{
+.filter-row {
   border: 2px solid rgba(0, 0, 255, .2);
   border-radius: 5px;
   padding: 5px;
@@ -136,7 +142,7 @@
   border-style: outset;
 }
 
-.image-location{
+.image-location {
   box-shadow: 2.5px 2.5px 5px 5px rgba(0, 0, 255, .2);
 }
 
@@ -144,7 +150,7 @@
   border: 2px solid #61dafb;
 }
 
-.custom-button-size{
+.custom-button-size {
   width: 80px;
 }
 
@@ -167,6 +173,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

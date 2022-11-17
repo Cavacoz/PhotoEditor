@@ -22,7 +22,7 @@ margin: auto;
 }
 `
 
-const Filters = ({ imgSource, filterClass, setFilterClass, filterRow, canvas, canvasDimensions }) => {
+const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
 
     const filters = [
         {
@@ -99,21 +99,7 @@ const Filters = ({ imgSource, filterClass, setFilterClass, filterRow, canvas, ca
     }
 
     function handleCancelClick() {
-        setFilterClass(undefined);
-        var img = new Image();
-        img.src = imgSource;
-        const ctx = canvas.current.getContext('2d');
-        ctx.clearRect(0, 0, canvasDimensions.CANVAS_WITDH, canvasDimensions.CANVAS_HEIGHT)
-        var hRatio = canvasDimensions.CANVAS_WITDH / img.naturalWidth;
-        var vRatio = canvasDimensions.CANVAS_HEIGHT / img.naturalHeight;
-        var ratio = Math.min(hRatio, vRatio);
-        var centerShift_x = (canvasDimensions.CANVAS_WITDH - img.naturalWidth * ratio) / 2;
-        var centerShift_y = (canvasDimensions.CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
-        ctx.drawImage(img,
-            0, 0, img.naturalWidth, img.naturalHeight,
-            centerShift_x, centerShift_y,
-            img.naturalWidth * ratio, img.naturalHeight * ratio)
-
+        setFilterClass('contrast(1) sepia(0) blur(0px)');
         filterRow.setFiltersRow(false)
     }
 
