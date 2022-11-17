@@ -29,9 +29,6 @@
   padding: 25px;
 }
 
-/**
-fix sizing and change color
-*/
 .filter-item--selected {
   background-color: rgba(56, 56, 255, 0.2);
   border-radius: 10px;
@@ -54,10 +51,8 @@ fix sizing and change color
     height: 100%;
 }
 
-.text-inside-image {
-    font-size: 80px;
-    color: white;
-    text-align: center;
+.text-inside-image-center {
+    font-size: 25px;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -67,6 +62,50 @@ fix sizing and change color
     width: fit-content;
     height: fit-content;
     margin: auto;
+}
+
+.text-inside-image-topleft {
+  font-size: 25px;
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  word-wrap: break-word;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.text-inside-image-topright {
+  font-size: 25px;
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  word-wrap: break-word;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.text-inside-image-bottomleft {
+  font-size: 25px;
+  position: absolute;
+  bottom: 10px;
+  left: 30px;
+  word-wrap: break-word;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.text-inside-image-bottomright {
+  font-size: 25px;
+  position: absolute;
+  bottom: 10px;
+  right: 30px;
+  word-wrap: break-word;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
 }
 
 .frame-image {
