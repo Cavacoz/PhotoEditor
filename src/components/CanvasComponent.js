@@ -6,6 +6,8 @@ import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVe
 import Frames from "./FramesComponent";
 import Filters from "./FiltersComponent";
 
+import './styles/instagram.css'
+
 const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
 
     function handleFramesClicked() {
@@ -50,46 +52,81 @@ const Canvas = (props) => {
     const [cropRowOpen, setCropRow] = useState(false);
     const [textRowOpen, setTextRow] = useState(false);
 
-    const [filterClass, setFilterClass] = useState(undefined);
+    const [finalCanvas, setFinalCanvas] = useState(false);
+
+    const [filterClass, setFilterClass] = useState('');
     const [framePath, setFramePath] = useState('');
 
     const canvas = useRef(null);
+    const frameCanvas = useRef(null);
+    const finalImageCanvas = useRef(null);
 
     const CANVAS_WITDH = 1000;
     const CANVAS_HEIGHT = 500
 
     const img = new Image();
     img.src = props.imgSource;
+    const frame = new Image();
+    frame.src = framePath;
+
+    var hRatio = CANVAS_WITDH / img.naturalWidth;
+    var vRatio = CANVAS_HEIGHT / img.naturalHeight;
+    var ratio = Math.min(hRatio, vRatio);
+    var centerShift_x = (CANVAS_WITDH - img.naturalWidth * ratio) / 2;
+    var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
 
     useEffect(() => {
-        const ctx = canvas.current.getContext('2d');
-        var hRatio = CANVAS_WITDH / img.naturalWidth;
-        var vRatio = CANVAS_HEIGHT / img.naturalHeight;
-        var ratio = Math.min(hRatio, vRatio);
-        var centerShift_x = (CANVAS_WITDH - img.naturalWidth * ratio) / 2;
-        var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
+        console.log('unico useEffect')
         img.onload = function () {
+            console.log('dei load na imagem')
+            const ctx = canvas.current.getContext('2d');
+            var hRatio = CANVAS_WITDH / img.naturalWidth;
+            var vRatio = CANVAS_HEIGHT / img.naturalHeight;
+            var ratio = Math.min(hRatio, vRatio);
+            var centerShift_x = (CANVAS_WITDH - img.naturalWidth * ratio) / 2;
+            var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
             ctx.drawImage(img,
                 0, 0, img.naturalWidth, img.naturalHeight,
                 centerShift_x, centerShift_y,
                 img.naturalWidth * ratio, img.naturalHeight * ratio)
         }
-    }, [img])
+    }, [])
 
     useEffect(() => {
+        console.log('atualizei imagem')
         const ctx = canvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT)
         ctx.filter = filterClass;
-        var hRatio = CANVAS_WITDH / img.naturalWidth;
-        var vRatio = CANVAS_HEIGHT / img.naturalHeight;
-        var ratio = Math.min(hRatio, vRatio);
-        var centerShift_x = (CANVAS_WITDH - img.naturalWidth * ratio) / 2;
-        var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
         ctx.drawImage(img,
             0, 0, img.naturalWidth, img.naturalHeight,
             centerShift_x, centerShift_y,
             img.naturalWidth * ratio, img.naturalHeight * ratio)
     }, [filterClass])
+
+    useEffect(() => {
+        console.log('adicionei frame')
+        const ctx = frameCanvas.current.getContext('2d');
+        ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+        var hRatio = CANVAS_WITDH / frame.naturalWidth;
+        var vRatio = CANVAS_HEIGHT / frame.naturalHeight;
+        var ratio = Math.min(hRatio, vRatio);
+        var centerShift_x = (CANVAS_WITDH - frame.naturalWidth * ratio) / 2;
+        var centerShift_y = (CANVAS_HEIGHT - frame.naturalHeight * ratio) / 2;
+        ctx.drawImage(frame,
+            0, 0, frame.naturalWidth, frame.naturalHeight,
+            centerShift_x, centerShift_y,
+            frame.naturalWidth * ratio, frame.naturalHeight * ratio)
+    }, [framePath])
+
+    function mergeBothCanvas() {
+        const ctx = finalImageCanvas.current.getContext('2d');
+        var canvasImg = document.getElementById('canvas1')
+        var canvasFrame = document.getElementById('canvas2');
+
+        //if using original image it works, but doesn't have filters
+        ctx.drawImage(canvasImg, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+        ctx.drawImage(canvasFrame, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+    }
 
     function handleTextChange(e) {
         setTextToInsert(e.target.value);
@@ -108,9 +145,10 @@ const Canvas = (props) => {
     }
 
     const downloadImage = (e) => {
+        mergeBothCanvas();
         let link = e.currentTarget;
         link.setAttribute('download', 'test.png');
-        let image = canvas.current.toDataURL('image/png');
+        let image = finalImageCanvas.current.toDataURL('image/png');
         link.setAttribute('href', image);
     }
 
@@ -138,16 +176,12 @@ const Canvas = (props) => {
 
                 <div className='col-10 top-wrapper-image'>
 
-                    <canvas className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
+                    <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
+                    <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
 
-                    {framePath !== '' ?
-                        <>
-                            <img className="frame-image" src={`${framePath}`} />
-                        </>
-                        :
-                        <>
-                        </>
-                    }
+
+                    <canvas id="canvas3" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true}></canvas>
+
 
                     <p className={`${textPosition}`} style={{ color: `${textColor}` }}>{textToInsert}</p>
 
@@ -164,7 +198,9 @@ const Canvas = (props) => {
                         <Frames imgSource={props.imgSource}
                             framePath={framePath}
                             setFramePath={setFramePath}
-                            frameRow={{ frameRowOpen, setFrameRow }} />
+                            frameRow={{ frameRowOpen, setFrameRow }}
+                            canvas={canvas}
+                            canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }} />
                         :
                         <>
                         </>
@@ -174,9 +210,7 @@ const Canvas = (props) => {
                         <Filters imgSource={props.imgSource}
                             filterClass={filterClass}
                             setFilterClass={setFilterClass}
-                            filterRow={{ filtersRowOpen, setFiltersRow }}
-                            canvas={canvas}
-                            canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }} />
+                            filterRow={{ filtersRowOpen, setFiltersRow }} />
                         :
                         <>
                         </>

@@ -23,7 +23,7 @@ margin: auto;
 }
 `
 
-const Frames = ({ imgSource, framePath, setFramePath, frameRow }) => {
+const Frames = ({ imgSource, framePath, setFramePath, frameRow, canvas, canvasDimensions }) => {
 
     const frames = [
         {
@@ -75,7 +75,7 @@ const Frames = ({ imgSource, framePath, setFramePath, frameRow }) => {
                                 <div key={frame.name} style={{ paddingTop: 15 }}>
                                     <div
                                         className={`filter-item ${framePath === frame.src ? 'filter-item--selected' : ''}`}
-                                        style={{marginLeft: 2}}
+                                        style={{ marginLeft: 2 }}
                                         onClick={() => setFramePath(frame.src)}>
                                         <div>
                                             <div className="filter-item__img">
