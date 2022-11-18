@@ -16,21 +16,18 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
     }
-
     function handleFiltersClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(!filterRow.filtersRowOpen);
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
     }
-
     function handleTextClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(false);
         cropRow.setCropRow(false);
         textRow.setTextRow(!textRow.textRowOpen);
     }
-
     return (
         <>
             <Button onClick={handleFramesClicked}><FontAwesomeIcon icon={faVectorSquare} /></Button>
@@ -45,24 +42,27 @@ const Canvas = (props) => {
 
     const [textToInsert, setTextToInsert] = useState();
     const [textColor, setTextColor] = useState('#ffffff');
-    const [textPosition, setTextPosition] = useState('text-inside-image-center')
 
     const [frameRowOpen, setFrameRow] = useState(false);
     const [filtersRowOpen, setFiltersRow] = useState(false);
     const [cropRowOpen, setCropRow] = useState(false);
     const [textRowOpen, setTextRow] = useState(false);
 
-    const [finalCanvas, setFinalCanvas] = useState(false);
-
     const [filterClass, setFilterClass] = useState('');
     const [framePath, setFramePath] = useState('');
 
+    const CANVAS_WITDH = 1000;
+    const CANVAS_HEIGHT = 500;
+
     const canvas = useRef(null);
     const frameCanvas = useRef(null);
-    const finalImageCanvas = useRef(null);
 
-    const CANVAS_WITDH = 1000;
-    const CANVAS_HEIGHT = 500
+    const textCanvas = useRef(null);
+    var texts = [];
+    var selectedText = -1;
+    var offsetX, offsetY, startX, startY;
+
+    const finalImageCanvas = useRef(null);
 
     const img = new Image();
     img.src = props.imgSource;
@@ -76,7 +76,6 @@ const Canvas = (props) => {
     var centerShift_y = (CANVAS_HEIGHT - img.naturalHeight * ratio) / 2;
 
     useEffect(() => {
-        console.log('unico useEffect')
         img.onload = function () {
             console.log('dei load na imagem')
             const ctx = canvas.current.getContext('2d');
@@ -91,9 +90,7 @@ const Canvas = (props) => {
                 img.naturalWidth * ratio, img.naturalHeight * ratio)
         }
     }, [])
-
     useEffect(() => {
-        console.log('atualizei imagem')
         const ctx = canvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT)
         ctx.filter = filterClass;
@@ -102,9 +99,7 @@ const Canvas = (props) => {
             centerShift_x, centerShift_y,
             img.naturalWidth * ratio, img.naturalHeight * ratio)
     }, [filterClass])
-
     useEffect(() => {
-        console.log('adicionei frame')
         const ctx = frameCanvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
         var hRatio = CANVAS_WITDH / frame.naturalWidth;
@@ -118,40 +113,93 @@ const Canvas = (props) => {
             frame.naturalWidth * ratio, frame.naturalHeight * ratio)
     }, [framePath])
 
-    function mergeBothCanvas() {
-        const ctx = finalImageCanvas.current.getContext('2d');
-        var canvasImg = document.getElementById('canvas1')
-        var canvasFrame = document.getElementById('canvas2');
-
-        //if using original image it works, but doesn't have filters
-        ctx.drawImage(canvasImg, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-        ctx.drawImage(canvasFrame, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+    function mergeCanvas(targetCanvas, ...args) {
+        const ctx = targetCanvas.getContext('2d');
+        args.forEach(canvas => {
+            ctx.drawImage(canvas, 0, 0, targetCanvas.width, targetCanvas.height);
+        });
     }
-
     function handleTextChange(e) {
         setTextToInsert(e.target.value);
     }
-
     function handleColorChange(e) {
         setTextColor(e.target.value);
     }
-
-    function handleTextPositionChange(e) {
-        setTextPosition(e.target.value);
-    }
-
     function clearImage() {
         props.clearImage();
     }
 
+    function addText() {
+        const ctx = textCanvas.current.getContext('2d');
+        var text = {
+            text: textToInsert,
+            x: 500,
+            y: 500
+        }
+        ctx.font = "26px verdana";
+        ctx.fillStyle = textColor;
+        text.width = ctx.measureText(text.text).width;
+        text.height = 1000;
+        texts.push(text);
+        draw();
+    }
+    function draw() {
+        const ctx = textCanvas.current.getContext('2d');
+        ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+        for (var i = 0; i < texts.length; i++) {
+            var text = texts[i];
+            ctx.fillText(text.text, text.x, text.y);
+        }
+    }
+    function textHittest(x, y, textIndex) {
+        console.log('hit neste texto')
+        var text = texts[textIndex];
+        return (x >= text.x);
+    }
+    function handleMouseDown(e) {
+        e.preventDefault();
+        offsetX = textCanvas.current.offsetLeft;
+        offsetY = textCanvas.current.offsetTop;
+        startX = parseInt(e.clientX - offsetX);
+        startY = parseInt(e.clientY - offsetY);
+        console.log(startX, startY)
+        for (var i = 0; i < texts.length; i++) {
+            if (textHittest(startX, startY, i)) {
+                selectedText = i;
+            }
+        }
+    }
+    function handleMouseUp(e) {
+        e.preventDefault();
+        selectedText = -1;
+    }
+    function handleMouseMove(e) {
+        if (selectedText < 0) {
+            return;
+        }
+        e.preventDefault();
+        var mouseX = parseInt(e.clientX - offsetX);
+        var mouseY = parseInt(e.clientY - offsetY);
+
+        // Put your mousemove stuff here
+        var dx = mouseX - startX;
+        var dy = mouseY - startY;
+        startX = mouseX;
+        startY = mouseY;
+
+        var text = texts[selectedText];
+        text.x += dx;
+        text.y += dy;
+
+        draw();
+    }
     const downloadImage = (e) => {
-        mergeBothCanvas();
+        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current);
         let link = e.currentTarget;
         link.setAttribute('download', 'test.png');
         let image = finalImageCanvas.current.toDataURL('image/png');
         link.setAttribute('href', image);
     }
-
     return (
         <>
             <div className="row" style={{ textAlign: "left" }}>
@@ -159,40 +207,35 @@ const Canvas = (props) => {
                     <h3>Image Name: </h3>
                     <h5>{props.imgName}</h5>
                 </div>
-                <div className="col-2" style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    height: 40, columnGap: 10
-                }}>
+                <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
                     <a id="download_image" href="some_link" onClick={downloadImage}>Download</a>
                     <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
                 </div>
 
             </div>
-
             <div className='row canvas'>
 
                 <div className='col-10 top-wrapper-image'>
 
-                    <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
-                    <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
-
-
-                    <canvas id="canvas3" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true}></canvas>
-
-
-                    <p className={`${textPosition}`} style={{ color: `${textColor}` }}>{textToInsert}</p>
+                    <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
+                    <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
+                    <canvas id="canvas3" className="text-canvas"
+                        ref={textCanvas}
+                        width={CANVAS_WITDH} height={CANVAS_HEIGHT}
+                        onMouseDown={handleMouseDown}
+                        onMouseUp={handleMouseUp}
+                        onMouseMove={handleMouseMove}
+                    />
+                    <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
 
                 </div>
-                <div className='col-2' style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+                <div className='col-2 image-buttons-col'>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
                         filterRow={{ filtersRowOpen, setFiltersRow }}
                         cropRow={{ cropRowOpen, setCropRow }}
                         textRow={{ textRowOpen, setTextRow }} />
                 </div>
-
                 <div className="row">
                     {frameRowOpen ?
                         <Frames imgSource={props.imgSource}
@@ -205,7 +248,6 @@ const Canvas = (props) => {
                         <>
                         </>
                     }
-
                     {filtersRowOpen ?
                         <Filters imgSource={props.imgSource}
                             filterClass={filterClass}
@@ -215,24 +257,17 @@ const Canvas = (props) => {
                         <>
                         </>
                     }
-
                     {textRowOpen ?
                         <>
-                            <div className="mt-2" style={{ display: "flex", flexDirection: "row", alignItems: "center", columnGap: 10 }}>
+                            <div className="col-10 mt-2 text-info-col">
                                 <Label><strong>Text</strong></Label>
                                 <Input maxLength={10} type="text" onChange={handleTextChange} />
 
                                 <Label><strong>Text color</strong></Label>
                                 <Input type="color" name="color" id="exampleColor" placeholder="color placeholder" value={textColor} onChange={handleColorChange} />
-
-                                <Label><strong>Text position</strong></Label>
-                                <Input type="select" onChange={handleTextPositionChange}>
-                                    <option value="text-inside-image-center">Center</option>
-                                    <option value="text-inside-image-topleft">Top Left</option>
-                                    <option value="text-inside-image-topright">Top Right</option>
-                                    <option value="text-inside-image-bottomleft">Bottom Left</option>
-                                    <option value="text-inside-image-bottomright">Bottom Right</option>
-                                </Input>
+                            </div>
+                            <div className="col-2 text-info-button">
+                                <Button onClick={addText}>Add Text</Button>
                             </div>
                         </>
                         :

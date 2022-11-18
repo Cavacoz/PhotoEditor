@@ -31,7 +31,7 @@ const PhotoEditor = (props) => {
                     <>
                         <div className='row'>
                             <h5 style={{ textAlign: 'start' }}>Choose your Photo to edit</h5>
-                            <Input style={{ width: 500, marginLeft: 12 }} type="file" accept=".png, .jpg, .jpeg" onChange={handleImageInputChange} />
+                            <Input className='input-file' type="file" accept=".png, .jpg, .jpeg" onChange={handleImageInputChange} />
                         </div>
                     </>
                 }
