@@ -23,7 +23,7 @@ margin: auto;
 }
 `
 
-const Frames = ({ imgSource, framePath, setFramePath, frameRow, canvas, canvasDimensions }) => {
+const Frames = ({ imgSource, framePath, setFramePath, frameRow }) => {
 
     const frames = [
         {
@@ -101,7 +101,7 @@ const Frames = ({ imgSource, framePath, setFramePath, frameRow, canvas, canvasDi
                 </FiltersStyles>
             </div>
             <div className="col-2">
-                <div className="row" style={{ paddingTop: 10, rowGap: 10 }}>
+                <div className="row accept-cancel-buttons">
                     <Button onClick={handleCancelClick}><FontAwesomeIcon icon={faXmark} /></Button>
                     <Button onClick={handleApplyClick}><FontAwesomeIcon icon={faCheck} /></Button>
                 </div>

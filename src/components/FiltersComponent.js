@@ -24,49 +24,6 @@ margin: auto;
 
 const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
 
-    const filters = [
-        {
-            name: '1997',
-            class: 'filter-1997',
-        },
-        {
-            name: 'Aden',
-            class: 'filter-aden',
-        },
-        {
-            name: 'Amaro',
-            class: 'filter-amaro',
-        },
-        {
-            name: 'Ashby',
-            class: 'filter-ashby',
-        },
-        {
-            name: 'Brannan',
-            class: 'filter-brannan',
-        },
-        {
-            name: 'Brooklyn',
-            class: 'filter-brooklyn',
-        },
-        {
-            name: 'Charmes',
-            class: 'filter-charmes',
-        },
-        {
-            name: 'Clarendon',
-            class: 'filter-clarendon',
-        },
-        {
-            name: 'Crema',
-            class: 'filter-crema',
-        },
-        {
-            name: 'Dogpatch',
-            class: 'filter-dogpatch',
-        },
-    ]
-
     const filters1 = [
         {
             name: 'Contrast',
@@ -142,7 +99,7 @@ const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
                 </FiltersStyles>
             </div>
             <div className="col-2">
-                <div className="row" style={{ paddingTop: 10, rowGap: 10 }}>
+                <div className="row accept-cancel-buttons">
                     <Button onClick={handleCancelClick}><FontAwesomeIcon icon={faXmark} /></Button>
                     <Button onClick={handleApplyClick}><FontAwesomeIcon icon={faCheck} /></Button>
                 </div>
