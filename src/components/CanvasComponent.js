@@ -22,6 +22,12 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
     }
+    function handleCropClicked() {
+        frameRow.setFrameRow(false);
+        filterRow.setFiltersRow(false);
+        cropRow.setCropRow(!cropRow.cropRowOpen);
+        textRow.setTextRow(false);
+    }
     function handleTextClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(false);
@@ -32,7 +38,7 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
         <>
             <Button onClick={handleFramesClicked}><FontAwesomeIcon icon={faVectorSquare} /></Button>
             <Button onClick={handleFiltersClicked}><FontAwesomeIcon icon={faWandMagicSparkles} /></Button>
-            <Button onClick={() => cropRow.setCropRow(!cropRow.cropRowOpen)}><FontAwesomeIcon icon={faScissors} /></Button>
+            <Button onClick={handleCropClicked}><FontAwesomeIcon icon={faScissors} /></Button>
             <Button onClick={handleTextClicked}><FontAwesomeIcon icon={faFont} /> Text</Button>
         </>
     );
@@ -42,6 +48,8 @@ const Canvas = (props) => {
 
     const [textToInsert, setTextToInsert] = useState();
     const [textColor, setTextColor] = useState('#ffffff');
+
+    const [cropOption, setCropOption] = useState();
 
     const [frameRowOpen, setFrameRow] = useState(false);
     const [filtersRowOpen, setFiltersRow] = useState(false);
@@ -127,6 +135,31 @@ const Canvas = (props) => {
     }
     function clearImage() {
         props.clearImage();
+    }
+
+    function cropClicked() {
+        switch (cropOption) {
+            case 'square':
+                console.log('croping in square form')
+                const ctx = canvas.current.getContext('2d');
+                var hRatio = CANVAS_WITDH / 200;
+                var vRatio = CANVAS_HEIGHT / 200;
+                var ratio = Math.min(hRatio, vRatio);
+                var centerShift_x = (CANVAS_WITDH - 200 * ratio) / 2;
+                var centerShift_y = (CANVAS_HEIGHT - 200 * ratio) / 2;
+                ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+                ctx.drawImage(img, 250, 150,
+                    200, 200,
+                    centerShift_x, centerShift_y,
+                    200 * ratio, 200 * ratio);
+                var imageData = ctx.getImageData(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+                var newImage = new Image();
+                newImage.src = canvas.current.toDataURL('image/png');
+                console.log(img.src)
+                img.src = newImage.src;
+                ctx.putImageData(imageData, 0, 0);
+                console.log(newImage.src)
+        }
     }
 
     function addText() {
@@ -245,8 +278,7 @@ const Canvas = (props) => {
                             canvas={canvas}
                             canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }} />
                         :
-                        <>
-                        </>
+                        <></>
                     }
                     {filtersRowOpen ?
                         <Filters imgSource={props.imgSource}
@@ -254,8 +286,25 @@ const Canvas = (props) => {
                             setFilterClass={setFilterClass}
                             filterRow={{ filtersRowOpen, setFiltersRow }} />
                         :
+                        <></>
+                    }
+                    {cropRowOpen ?
                         <>
+                            <div className="col-10 text-info-col">
+                                <Label><strong>Crop option</strong></Label>
+                                <Input type="select" onChange={(e) => setCropOption(e.target.value)}>
+                                    <option value="circle">Circle</option>
+                                    <option value="square">Square</option>
+                                    <option value="ellipse">Ellipse</option>
+                                    <option value="triangle">Triangle</option>
+                                </Input>
+                            </div>
+                            <div className="col-2 text-info-button">
+                                <Button onClick={cropClicked}>Crop it</Button>
+                            </div>
                         </>
+                        :
+                        <></>
                     }
                     {textRowOpen ?
                         <>
