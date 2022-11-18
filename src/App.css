@@ -29,6 +29,21 @@
   padding: 25px;
 }
 
+.options-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 40px;
+  column-gap: 10px;
+}
+
+.image-buttons-col {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+
+}
+
 .filter-item--selected {
   background-color: rgba(56, 56, 255, 0.2);
   border-radius: 10px;

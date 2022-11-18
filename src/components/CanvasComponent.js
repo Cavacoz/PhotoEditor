@@ -159,12 +159,7 @@ const Canvas = (props) => {
                     <h3>Image Name: </h3>
                     <h5>{props.imgName}</h5>
                 </div>
-                <div className="col-2" style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                    height: 40, columnGap: 10
-                }}>
+                <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
                     <a id="download_image" href="some_link" onClick={downloadImage}>Download</a>
                     <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
@@ -186,7 +181,7 @@ const Canvas = (props) => {
                     <p className={`${textPosition}`} style={{ color: `${textColor}` }}>{textToInsert}</p>
 
                 </div>
-                <div className='col-2' style={{ display: "flex", flexDirection: "column", rowGap: 10 }}>
+                <div className='col-2 image-buttons-col'>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
                         filterRow={{ filtersRowOpen, setFiltersRow }}
                         cropRow={{ cropRowOpen, setCropRow }}
