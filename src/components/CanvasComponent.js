@@ -118,14 +118,11 @@ const Canvas = (props) => {
             frame.naturalWidth * ratio, frame.naturalHeight * ratio)
     }, [framePath])
 
-    function mergeBothCanvas() {
-        const ctx = finalImageCanvas.current.getContext('2d');
-        var canvasImg = document.getElementById('canvas1')
-        var canvasFrame = document.getElementById('canvas2');
-
-        //if using original image it works, but doesn't have filters
-        ctx.drawImage(canvasImg, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-        ctx.drawImage(canvasFrame, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+    function mergeCanvas(targetCanvas, ...args) {
+        const ctx = targetCanvas.getContext('2d');
+        args.forEach(canvas => {
+            ctx.drawImage(canvas, 0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+        });
     }
 
     function handleTextChange(e) {
@@ -145,7 +142,7 @@ const Canvas = (props) => {
     }
 
     const downloadImage = (e) => {
-        mergeBothCanvas();
+        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current);
         let link = e.currentTarget;
         link.setAttribute('download', 'test.png');
         let image = finalImageCanvas.current.toDataURL('image/png');
@@ -173,7 +170,6 @@ const Canvas = (props) => {
 
                     <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
                     <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT}></canvas>
-
 
                     <canvas id="canvas3" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true}></canvas>
 
