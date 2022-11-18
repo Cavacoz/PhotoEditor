@@ -11,10 +11,10 @@ const Home = () => {
             <hr />
 
             <div className="row mt-5">
-                <div className="col-6 something" style={{ alignSelf: "center" }}>
+                <div className="col-6 what-is-it" >
                     <h3>What is it</h3>
                 </div>
-                <div className="col-6 something1" style={{ textAlign: "start" }}>
+                <div className="col-6 what-is-it-info">
                     <ul>
                         <lh>Here you can upload one image at a time so you can:</lh>
                         <li className="mt-1">Crop it</li>
@@ -25,10 +25,10 @@ const Home = () => {
             </div>
 
             <div className="row mt-5">
-                <div className="col-6 something" style={{ alignSelf: "center" }}>
+                <div className="col-6 what-is-it">
                     <h3>How to use it</h3>
                 </div>
-                <div className="col-6 something1" style={{ textAlign: "start" }}>
+                <div className="col-6 what-is-it-info">
                     <ol type="1">
                         <lh>Steps:</lh>
                         <li className="mt-1">Go to Editor Page</li>

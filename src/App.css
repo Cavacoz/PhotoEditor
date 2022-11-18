@@ -23,6 +23,11 @@
   width: 650px;
 }
 
+.input-file {
+  width: 500px;
+  margin-left: 12px;
+}
+
 .canvas {
   border: 2px solid rgba(0, 0, 255, .2);
   border-radius: 5px;
@@ -67,66 +72,15 @@
 }
 
 .image-frame {
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
 }
 
-.text-inside-image-center {
-  font-size: 25px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  word-wrap: break-word;
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
-}
-
-.text-inside-image-topleft {
-  font-size: 25px;
-  position: absolute;
-  top: 10px;
-  left: 30px;
-  word-wrap: break-word;
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
-}
-
-.text-inside-image-topright {
-  font-size: 25px;
-  position: absolute;
-  top: 10px;
-  right: 30px;
-  word-wrap: break-word;
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
-}
-
-.text-inside-image-bottomleft {
-  font-size: 25px;
-  position: absolute;
-  bottom: 10px;
-  left: 30px;
-  word-wrap: break-word;
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
-}
-
-.text-inside-image-bottomright {
-  font-size: 25px;
-  position: absolute;
-  bottom: 10px;
-  right: 30px;
-  word-wrap: break-word;
-  width: fit-content;
-  height: fit-content;
-  margin: auto;
+.text-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .frame-image {
@@ -146,15 +100,17 @@
   padding: 5px;
 }
 
-.something {
+.what-is-it {
   border-color: rgba(0, 0, 255, .2);
   border-style: none none inset;
+  align-self: center;
 }
 
-.something1 {
+.what-is-it-info {
   border-bottom: rgba(0, 0, 255, .2);
   border-right: rgba(0, 0, 255, .2);
   border-style: outset;
+  text-align: start;
 }
 
 .image-location {
@@ -163,6 +119,25 @@
 
 .tools {
   border: 2px solid #61dafb;
+}
+
+.text-info-col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.text-info-button {
+  display: flex;
+  align-items: center;
+}
+
+.accept-cancel-buttons {
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+  row-gap: 10px;
 }
 
 .custom-button-size {

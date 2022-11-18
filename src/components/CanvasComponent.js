@@ -16,21 +16,18 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
     }
-
     function handleFiltersClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(!filterRow.filtersRowOpen);
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
     }
-
     function handleTextClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(false);
         cropRow.setCropRow(false);
         textRow.setTextRow(!textRow.textRowOpen);
     }
-
     return (
         <>
             <Button onClick={handleFramesClicked}><FontAwesomeIcon icon={faVectorSquare} /></Button>
@@ -93,7 +90,6 @@ const Canvas = (props) => {
                 img.naturalWidth * ratio, img.naturalHeight * ratio)
         }
     }, [])
-
     useEffect(() => {
         const ctx = canvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT)
@@ -103,7 +99,6 @@ const Canvas = (props) => {
             centerShift_x, centerShift_y,
             img.naturalWidth * ratio, img.naturalHeight * ratio)
     }, [filterClass])
-
     useEffect(() => {
         const ctx = frameCanvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
@@ -124,15 +119,12 @@ const Canvas = (props) => {
             ctx.drawImage(canvas, 0, 0, targetCanvas.width, targetCanvas.height);
         });
     }
-
     function handleTextChange(e) {
         setTextToInsert(e.target.value);
     }
-
     function handleColorChange(e) {
         setTextColor(e.target.value);
     }
-
     function clearImage() {
         props.clearImage();
     }
@@ -148,12 +140,9 @@ const Canvas = (props) => {
         ctx.fillStyle = textColor;
         text.width = ctx.measureText(text.text).width;
         text.height = 1000;
-
         texts.push(text);
-
         draw();
     }
-
     function draw() {
         const ctx = textCanvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
@@ -162,13 +151,11 @@ const Canvas = (props) => {
             ctx.fillText(text.text, text.x, text.y);
         }
     }
-
     function textHittest(x, y, textIndex) {
         console.log('hit neste texto')
         var text = texts[textIndex];
         return (x >= text.x);
     }
-
     function handleMouseDown(e) {
         e.preventDefault();
         offsetX = textCanvas.current.offsetLeft;
@@ -182,16 +169,12 @@ const Canvas = (props) => {
             }
         }
     }
-
     function handleMouseUp(e) {
         e.preventDefault();
         selectedText = -1;
     }
-
     function handleMouseMove(e) {
-        console.log('estou no move');
         if (selectedText < 0) {
-            console.log('sai do move');
             return;
         }
         e.preventDefault();
@@ -210,8 +193,6 @@ const Canvas = (props) => {
 
         draw();
     }
-
-
     const downloadImage = (e) => {
         mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current);
         let link = e.currentTarget;
@@ -219,7 +200,6 @@ const Canvas = (props) => {
         let image = finalImageCanvas.current.toDataURL('image/png');
         link.setAttribute('href', image);
     }
-
     return (
         <>
             <div className="row" style={{ textAlign: "left" }}>
@@ -234,7 +214,6 @@ const Canvas = (props) => {
                 </div>
 
             </div>
-
             <div className='row canvas'>
 
                 <div className='col-10 top-wrapper-image'>
@@ -248,10 +227,7 @@ const Canvas = (props) => {
                         onMouseUp={handleMouseUp}
                         onMouseMove={handleMouseMove}
                     />
-
                     <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
-
-
 
                 </div>
                 <div className='col-2 image-buttons-col'>
@@ -260,7 +236,6 @@ const Canvas = (props) => {
                         cropRow={{ cropRowOpen, setCropRow }}
                         textRow={{ textRowOpen, setTextRow }} />
                 </div>
-
                 <div className="row">
                     {frameRowOpen ?
                         <Frames imgSource={props.imgSource}
@@ -273,7 +248,6 @@ const Canvas = (props) => {
                         <>
                         </>
                     }
-
                     {filtersRowOpen ?
                         <Filters imgSource={props.imgSource}
                             filterClass={filterClass}
@@ -283,17 +257,16 @@ const Canvas = (props) => {
                         <>
                         </>
                     }
-
                     {textRowOpen ?
                         <>
-                            <div className="mt-2" style={{ display: "flex", flexDirection: "row", alignItems: "center", columnGap: 10 }}>
+                            <div className="col-10 mt-2 text-info-col">
                                 <Label><strong>Text</strong></Label>
                                 <Input maxLength={10} type="text" onChange={handleTextChange} />
 
                                 <Label><strong>Text color</strong></Label>
                                 <Input type="color" name="color" id="exampleColor" placeholder="color placeholder" value={textColor} onChange={handleColorChange} />
-
-
+                            </div>
+                            <div className="col-2 text-info-button">
                                 <Button onClick={addText}>Add Text</Button>
                             </div>
                         </>
