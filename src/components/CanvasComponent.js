@@ -46,6 +46,8 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
 
 const Canvas = (props) => {
 
+    const [imgSource, setImageSource] = useState(props.imgSource);
+
     const [textToInsert, setTextToInsert] = useState();
     const [textColor, setTextColor] = useState('#ffffff');
 
@@ -72,8 +74,8 @@ const Canvas = (props) => {
 
     const finalImageCanvas = useRef(null);
 
-    const img = new Image();
-    img.src = props.imgSource;
+    var img = new Image();
+    img.src = imgSource;
     const frame = new Image();
     frame.src = framePath;
 
@@ -140,7 +142,7 @@ const Canvas = (props) => {
     function cropClicked() {
         switch (cropOption) {
             case 'square':
-                console.log('croping in square form')
+                console.log('croping in square form');
                 const ctx = canvas.current.getContext('2d');
                 var hRatio = CANVAS_WITDH / 200;
                 var vRatio = CANVAS_HEIGHT / 200;
@@ -152,13 +154,12 @@ const Canvas = (props) => {
                     200, 200,
                     centerShift_x, centerShift_y,
                     200 * ratio, 200 * ratio);
-                var imageData = ctx.getImageData(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-                var newImage = new Image();
-                newImage.src = canvas.current.toDataURL('image/png');
-                console.log(img.src)
-                img.src = newImage.src;
-                ctx.putImageData(imageData, 0, 0);
-                console.log(newImage.src)
+                var imgData = ctx.getImageData(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+                ctx.putImageData(imgData, CANVAS_WITDH, CANVAS_HEIGHT);
+                setImageSource(canvas.current.toDataURL('image/png'));
+                break;
+            default:
+                console.log('default cropping option');
         }
     }
 
@@ -214,7 +215,6 @@ const Canvas = (props) => {
         var mouseX = parseInt(e.clientX - offsetX);
         var mouseY = parseInt(e.clientY - offsetY);
 
-        // Put your mousemove stuff here
         var dx = mouseX - startX;
         var dy = mouseY - startY;
         startX = mouseX;
@@ -227,7 +227,6 @@ const Canvas = (props) => {
         draw();
     }
     const downloadImage = (e) => {
-        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current);
         let link = e.currentTarget;
         link.setAttribute('download', 'test.png');
         let image = finalImageCanvas.current.toDataURL('image/png');
@@ -242,15 +241,15 @@ const Canvas = (props) => {
                 </div>
                 <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    <a id="download_image" href="some_link" onClick={downloadImage}>Download</a>
+                    <a id="download_image" href="some_link" onClick={(e) => {
+                        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                        downloadImage(e)
+                    }}><Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
                     <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
                 </div>
-
             </div>
             <div className='row canvas'>
-
                 <div className='col-10 top-wrapper-image'>
-
                     <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
                     <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
                     <canvas id="canvas3" className="text-canvas"
@@ -261,7 +260,6 @@ const Canvas = (props) => {
                         onMouseMove={handleMouseMove}
                     />
                     <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
-
                 </div>
                 <div className='col-2 image-buttons-col'>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
