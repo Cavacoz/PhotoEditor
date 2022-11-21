@@ -46,10 +46,12 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
 
 const Canvas = (props) => {
 
+    const [imgSource, setImageSource] = useState(props.imgSource);
+
     const [textToInsert, setTextToInsert] = useState();
     const [textColor, setTextColor] = useState('#ffffff');
 
-    const [cropOption, setCropOption] = useState();
+    const [cropOption, setCropOption] = useState('square');
 
     const [frameRowOpen, setFrameRow] = useState(false);
     const [filtersRowOpen, setFiltersRow] = useState(false);
@@ -73,7 +75,7 @@ const Canvas = (props) => {
     const finalImageCanvas = useRef(null);
 
     const img = new Image();
-    img.src = props.imgSource;
+    img.src = imgSource;
     const frame = new Image();
     frame.src = framePath;
 
@@ -140,25 +142,20 @@ const Canvas = (props) => {
     function cropClicked() {
         switch (cropOption) {
             case 'square':
-                console.log('croping in square form')
                 const ctx = canvas.current.getContext('2d');
-                var hRatio = CANVAS_WITDH / 200;
-                var vRatio = CANVAS_HEIGHT / 200;
+                var hRatio = CANVAS_WITDH / (img.naturalWidth - 200);
+                var vRatio = CANVAS_HEIGHT / (img.naturalHeight - 200);
                 var ratio = Math.min(hRatio, vRatio);
-                var centerShift_x = (CANVAS_WITDH - 200 * ratio) / 2;
-                var centerShift_y = (CANVAS_HEIGHT - 200 * ratio) / 2;
+                var centerShift_x = (CANVAS_WITDH - (img.naturalWidth - 200) * ratio) / 2;
+                var centerShift_y = (CANVAS_HEIGHT - (img.naturalHeight - 200) * ratio) / 2;
                 ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-                ctx.drawImage(img, 250, 150,
-                    200, 200,
-                    centerShift_x, centerShift_y,
-                    200 * ratio, 200 * ratio);
-                var imageData = ctx.getImageData(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-                var newImage = new Image();
-                newImage.src = canvas.current.toDataURL('image/png');
-                console.log(img.src)
-                img.src = newImage.src;
-                ctx.putImageData(imageData, 0, 0);
-                console.log(newImage.src)
+                ctx.drawImage(img,
+                    100, 100, img.naturalWidth - 200, img.naturalHeight - 200,
+                    centerShift_x, centerShift_y, (img.naturalWidth - 200) * ratio, (img.naturalHeight - 200) * ratio);
+                var imgData = ctx.getImageData(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
+                ctx.putImageData(imgData, CANVAS_WITDH, CANVAS_HEIGHT);
+                setImageSource(canvas.current.toDataURL('image/png'));
+                break;
         }
     }
 
@@ -242,7 +239,7 @@ const Canvas = (props) => {
                 </div>
                 <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    <a id="download_image" href="some_link" onClick={downloadImage}>Download</a>
+                    <a id="download_image" href="some_link" onClick={downloadImage}><Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
                     <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
                 </div>
 
@@ -293,8 +290,8 @@ const Canvas = (props) => {
                             <div className="col-10 text-info-col">
                                 <Label><strong>Crop option</strong></Label>
                                 <Input type="select" onChange={(e) => setCropOption(e.target.value)}>
-                                    <option value="circle">Circle</option>
                                     <option value="square">Square</option>
+                                    <option value="circle">Circle</option>
                                     <option value="ellipse">Ellipse</option>
                                     <option value="triangle">Triangle</option>
                                 </Input>
