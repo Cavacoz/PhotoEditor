@@ -74,7 +74,7 @@ const Canvas = (props) => {
 
     const finalImageCanvas = useRef(null);
 
-    const img = new Image();
+    var img = new Image();
     img.src = imgSource;
     const frame = new Image();
     frame.src = framePath;
@@ -211,7 +211,6 @@ const Canvas = (props) => {
         var mouseX = parseInt(e.clientX - offsetX);
         var mouseY = parseInt(e.clientY - offsetY);
 
-        // Put your mousemove stuff here
         var dx = mouseX - startX;
         var dy = mouseY - startY;
         startX = mouseX;
@@ -224,7 +223,6 @@ const Canvas = (props) => {
         draw();
     }
     const downloadImage = (e) => {
-        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current);
         let link = e.currentTarget;
         link.setAttribute('download', 'test.png');
         let image = finalImageCanvas.current.toDataURL('image/png');
@@ -239,15 +237,15 @@ const Canvas = (props) => {
                 </div>
                 <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    <a id="download_image" href="some_link" onClick={downloadImage}><Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
+                    <a id="download_image" href="some_link" onClick={(e) => {
+                        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                        downloadImage(e)
+                    }}><Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
                     <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
                 </div>
-
             </div>
             <div className='row canvas'>
-
                 <div className='col-10 top-wrapper-image'>
-
                     <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
                     <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
                     <canvas id="canvas3" className="text-canvas"
@@ -258,7 +256,6 @@ const Canvas = (props) => {
                         onMouseMove={handleMouseMove}
                     />
                     <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
-
                 </div>
                 <div className='col-2 image-buttons-col'>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
