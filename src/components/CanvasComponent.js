@@ -9,7 +9,6 @@ import Filters from "./FiltersComponent";
 import './styles/instagram.css'
 
 const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
-
     function handleFramesClicked() {
         frameRow.setFrameRow(!frameRow.frameRowOpen);
         filterRow.setFiltersRow(false);
@@ -122,7 +121,6 @@ const Canvas = (props) => {
             centerShift_x, centerShift_y,
             frame.naturalWidth * ratio, frame.naturalHeight * ratio)
     }, [framePath])
-
     function mergeCanvas(targetCanvas, ...args) {
         const ctx = targetCanvas.getContext('2d');
         args.forEach(canvas => {
@@ -138,7 +136,6 @@ const Canvas = (props) => {
     function clearImage() {
         props.clearImage();
     }
-
     function cropClicked() {
         switch (cropOption) {
             case 'square':
@@ -158,7 +155,6 @@ const Canvas = (props) => {
                 break;
         }
     }
-
     function addText() {
         const ctx = textCanvas.current.getContext('2d');
         var text = {
@@ -210,21 +206,16 @@ const Canvas = (props) => {
         e.preventDefault();
         var mouseX = parseInt(e.clientX - offsetX);
         var mouseY = parseInt(e.clientY - offsetY);
-
-        // Put your mousemove stuff here
         var dx = mouseX - startX;
         var dy = mouseY - startY;
         startX = mouseX;
         startY = mouseY;
-
         var text = texts[selectedText];
         text.x += dx;
         text.y += dy;
-
         draw();
     }
     const downloadImage = (e) => {
-        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current);
         let link = e.currentTarget;
         link.setAttribute('download', 'test.png');
         let image = finalImageCanvas.current.toDataURL('image/png');
@@ -239,15 +230,22 @@ const Canvas = (props) => {
                 </div>
                 <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    <a id="download_image" href="some_link" onClick={downloadImage}><Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
-                    <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
+                    {props.auth.isAuthenticated ?
+                        <>
+                            <a id="download_image" href="some_link" onClick={(e) => {
+                                downloadImage(e)
+                                mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                            }}>
+                                <Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
+                            <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
+                        </>
+                        :
+                        <></>
+                    }
                 </div>
-
             </div>
             <div className='row canvas'>
-
                 <div className='col-10 top-wrapper-image'>
-
                     <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
                     <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
                     <canvas id="canvas3" className="text-canvas"
@@ -258,7 +256,6 @@ const Canvas = (props) => {
                         onMouseMove={handleMouseMove}
                     />
                     <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
-
                 </div>
                 <div className='col-2 image-buttons-col'>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
@@ -323,7 +320,5 @@ const Canvas = (props) => {
             </div>
         </>
     );
-
 }
-
 export default Canvas;
