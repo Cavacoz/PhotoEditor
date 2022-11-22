@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import Slider from "@material-ui/core/Slider";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "./Crop";
 
@@ -65,32 +64,6 @@ const EasyCrop = ({ imgSource }) => {
             onZoomChange={setZoom}
             onRotationChange={setRotation}
           />
-        </div>
-        <div className="controls">
-          <label>
-            Rotate
-            <Slider
-              value={rotation}
-              min={0}
-              max={360}
-              step={1}
-              aria-labelledby="rotate"
-              onChange={(e, rotation) => setRotation(rotation)}
-              className="range"
-            />
-          </label>
-          <label>
-            Zoom
-            <Slider
-              value={zoom}
-              min={1}
-              max={3}
-              step={0.1}
-              aria-labelledby="zoom"
-              onChange={(e, zoom) => setZoom(zoom)}
-              className="range"
-            />
-          </label>
         </div>
       </div>
       <div className="cropped-image-container">
