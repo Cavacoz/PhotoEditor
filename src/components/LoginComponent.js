@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input, Col } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
+
 const Login = (props) => {
+
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     function handleLoginClick() {
-        console.log(email);
-        console.log(password);
+        props.loginUser({ username: email, password: password });
+        navigate('/home');
     }
 
     return (

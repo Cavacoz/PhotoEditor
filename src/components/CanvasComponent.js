@@ -7,25 +7,28 @@ import Frames from "./FramesComponent";
 import Filters from "./FiltersComponent";
 
 import './styles/instagram.css'
+import EasyCrop from "./EasyCrop";
 
-const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
-
+const FramesFilters = ({ frameRow, filterRow, cropRow, textRow, cropOption }) => {
     function handleFramesClicked() {
         frameRow.setFrameRow(!frameRow.frameRowOpen);
         filterRow.setFiltersRow(false);
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
+        cropOption.setIsCropping(false);
     }
     function handleFiltersClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(!filterRow.filtersRowOpen);
         cropRow.setCropRow(false);
         textRow.setTextRow(false);
+        cropOption.setIsCropping(false);
     }
     function handleCropClicked() {
         frameRow.setFrameRow(false);
         filterRow.setFiltersRow(false);
         cropRow.setCropRow(!cropRow.cropRowOpen);
+        cropOption.setIsCropping(!cropOption.isCropping);
         textRow.setTextRow(false);
     }
     function handleTextClicked() {
@@ -33,6 +36,7 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow }) => {
         filterRow.setFiltersRow(false);
         cropRow.setCropRow(false);
         textRow.setTextRow(!textRow.textRowOpen);
+        cropOption.setIsCropping(false);
     }
     return (
         <>
@@ -52,6 +56,7 @@ const Canvas = (props) => {
     const [textColor, setTextColor] = useState('#ffffff');
 
     const [cropOption, setCropOption] = useState('square');
+    const [isCropping, setIsCropping] = useState(false);
 
     const [frameRowOpen, setFrameRow] = useState(false);
     const [filtersRowOpen, setFiltersRow] = useState(false);
@@ -122,7 +127,6 @@ const Canvas = (props) => {
             centerShift_x, centerShift_y,
             frame.naturalWidth * ratio, frame.naturalHeight * ratio)
     }, [framePath])
-
     function mergeCanvas(targetCanvas, ...args) {
         const ctx = targetCanvas.getContext('2d');
         args.forEach(canvas => {
@@ -138,7 +142,6 @@ const Canvas = (props) => {
     function clearImage() {
         props.clearImage();
     }
-
     function cropClicked() {
         switch (cropOption) {
             case 'square':
@@ -158,7 +161,6 @@ const Canvas = (props) => {
                 break;
         }
     }
-
     function addText() {
         const ctx = textCanvas.current.getContext('2d');
         var text = {
@@ -210,16 +212,13 @@ const Canvas = (props) => {
         e.preventDefault();
         var mouseX = parseInt(e.clientX - offsetX);
         var mouseY = parseInt(e.clientY - offsetY);
-
         var dx = mouseX - startX;
         var dy = mouseY - startY;
         startX = mouseX;
         startY = mouseY;
-
         var text = texts[selectedText];
         text.x += dx;
         text.y += dy;
-
         draw();
     }
     const downloadImage = (e) => {
@@ -237,31 +236,45 @@ const Canvas = (props) => {
                 </div>
                 <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    <a id="download_image" href="some_link" onClick={(e) => {
-                        mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
-                        downloadImage(e)
-                    }}><Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
-                    <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
+                    {props.auth.isAuthenticated ?
+                        <>
+                            <a id="download_image" href="some_link" onClick={(e) => {
+                                downloadImage(e)
+                                mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                            }}>
+                                <Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
+                            <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
+                        </>
+                        :
+                        <></>
+                    }
                 </div>
             </div>
             <div className='row canvas'>
                 <div className='col-10 top-wrapper-image'>
-                    <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
-                    <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
-                    <canvas id="canvas3" className="text-canvas"
-                        ref={textCanvas}
-                        width={CANVAS_WITDH} height={CANVAS_HEIGHT}
-                        onMouseDown={handleMouseDown}
-                        onMouseUp={handleMouseUp}
-                        onMouseMove={handleMouseMove}
-                    />
-                    <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
+                    {isCropping ?
+                        <EasyCrop imgSource={imgSource} />
+                        :
+                        <>
+                            <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
+                            <canvas id="canvas2" className="image-frame" ref={frameCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
+                            <canvas id="canvas3" className="text-canvas"
+                                ref={textCanvas}
+                                width={CANVAS_WITDH} height={CANVAS_HEIGHT}
+                                onMouseDown={handleMouseDown}
+                                onMouseUp={handleMouseUp}
+                                onMouseMove={handleMouseMove}
+                            />
+                            <canvas id="canvas4" ref={finalImageCanvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} hidden={true} />
+                        </>
+                    }
                 </div>
                 <div className='col-2 image-buttons-col'>
                     <FramesFilters frameRow={{ frameRowOpen, setFrameRow }}
                         filterRow={{ filtersRowOpen, setFiltersRow }}
                         cropRow={{ cropRowOpen, setCropRow }}
-                        textRow={{ textRowOpen, setTextRow }} />
+                        textRow={{ textRowOpen, setTextRow }}
+                        cropOption={{ isCropping, setIsCropping }} />
                 </div>
                 <div className="row">
                     {frameRowOpen ?
@@ -320,7 +333,5 @@ const Canvas = (props) => {
             </div>
         </>
     );
-
 }
-
 export default Canvas;
