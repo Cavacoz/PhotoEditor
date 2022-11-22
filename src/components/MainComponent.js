@@ -7,6 +7,7 @@ import Header from './HeaderComponent';
 import Home from './HomeComponent';
 
 import { baseUrl } from '../shared/baseUrl';
+import MyCollection from './MyCollectionComponent';
 
 const Main = (props) => {
 
@@ -51,6 +52,7 @@ const Main = (props) => {
                 <Route path="/login" element={<Login loginUser={loginUser} />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/photoeditor" element={<PhotoEditor auth={auth} />} />
+                <Route path="/mycollection" element={<MyCollection />} />
                 <Route path="/home" element={<Home />} />
                 <Route path='*' element={<Navigate to="/home" />} />
             </Routes >
