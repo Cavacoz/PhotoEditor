@@ -79,7 +79,7 @@ const Canvas = (props) => {
 
     const finalImageCanvas = useRef(null);
 
-    const img = new Image();
+    var img = new Image();
     img.src = imgSource;
     const frame = new Image();
     frame.src = framePath;
