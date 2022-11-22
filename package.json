@@ -12,6 +12,7 @@
     "ajv": "^6.12.6",
     "ajv-keywords": "^3.5.2",
     "bootstrap": "^5.2.2",
+    "imagekitio-react": "^2.0.0",
     "jquery": "^3.6.1",
     "json-schema-traverse": "^0.4.1",
     "react": "^18.2.0",
