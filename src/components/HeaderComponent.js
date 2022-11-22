@@ -13,6 +13,12 @@ const Header = (props) => {
         navigate("/signup")
     }
 
+    function handleLogoutClick() {
+        props.setAuth([]);
+        localStorage.removeItem('token');
+        localStorage.removeItem('creds');
+        navigate("/home")
+    }
 
     return (
         <Navbar className="header" container="md" expand>
@@ -31,17 +37,30 @@ const Header = (props) => {
                     </NavLink>
                 </NavItem>
             </Nav>
-            <Nav navbar style={{gap: 10}}>
-                <NavItem>
-                    <Button onClick={handleLoginClick} outline>
-                        Login
-                    </Button>
-                </NavItem>
-                <NavItem>
-                    <Button onClick={handleSignupClick}>
-                        Sign Up
-                    </Button>
-                </NavItem>
+            <Nav navbar style={{ gap: 10 }}>
+                {!props.auth.isAuthenticated ?
+                    <>
+                        <NavItem>
+                            <Button onClick={handleLoginClick} outline>
+                                Login
+                            </Button>
+                        </NavItem>
+                        <NavItem>
+                            <Button onClick={handleSignupClick}>
+                                Sign Up
+                            </Button>
+                        </NavItem>
+                    </>
+                    :
+                    <>
+                        <NavItem>
+                            Hello, {props.auth.firstname} {props.auth.lastname}!
+                            <Button onClick={handleLogoutClick} outline>
+                                Logout
+                            </Button>
+                        </NavItem>
+                    </>
+                }
             </Nav>
         </Navbar>
     );

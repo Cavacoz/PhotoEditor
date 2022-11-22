@@ -25,7 +25,7 @@ const PhotoEditor = (props) => {
                 <hr />
                 {imgSource ?
                     <div className="container">
-                        <Canvas imgName={imgName} imgSource={imgSource} clearImage={clearImage} />
+                        <Canvas auth={props.auth} imgName={imgName} imgSource={imgSource} clearImage={clearImage} />
                     </div>
                     :
                     <>

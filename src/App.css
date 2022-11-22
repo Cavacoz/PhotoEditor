@@ -59,6 +59,10 @@
   height: 100%;
 }
 
+.crop-container{
+  height: 500px;
+}
+
 .top-wrapper-image {
   height: 100%;
   position: relative;
