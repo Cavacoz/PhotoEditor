@@ -19,6 +19,33 @@ export const loginUser = (creds, setAuth) => {
     // handle error
 }
 
+export const signUpUser = (regInfo) => {
+
+    const newUser = {
+        firstname: regInfo.firstname,
+        lastname: regInfo.lastname,
+        username: regInfo.email,
+        password: regInfo.password
+    }
+
+    console.log('api',newUser);
+    console.log('stringify', JSON.stringify(newUser))
+    return fetch(baseUrl + 'users/api/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newUser)
+    })
+        .then((response) => response.json())
+        .then((response) => {
+            if (response.success) {
+                alert('Successful Sign Up', response.status);
+            }
+        })
+    // handle error
+}
+
 export const fetchImages = () => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     return fetch(baseUrl + 'mycollection', {
