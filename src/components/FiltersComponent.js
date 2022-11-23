@@ -24,7 +24,7 @@ margin: auto;
 
 const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
 
-    const filters1 = [
+    const filters = [
         {
             name: 'Contrast',
             effects: 'contrast(1.4)'
@@ -69,7 +69,7 @@ const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
             <div className="col-10 mt-3">
                 <FiltersStyles>
                     <Slider {...settings} >
-                        {filters1.map((filter, index) => {
+                        {filters.map((filter, index) => {
                             return (
                                 <div key={index} style={{ paddingTop: 15 }}>
                                     <div

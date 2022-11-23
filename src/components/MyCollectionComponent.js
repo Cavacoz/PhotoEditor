@@ -19,18 +19,25 @@ const MyCollection = (props) => {
     };
 
     return (
-        <IKContext
-            publicKey={publicKey}
-            urlEndpoint={urlEndpoint}
-            transformationPosition="path"
-            authenticationEndpoint={authenticationEndpoint}>
+        <>
+            <div className='container mt-4'>
+                <div className='row' style={{ textAlign: 'left' }}>
+                    <h1>My Collection</h1>
+                </div>
+                <IKContext
+                    publicKey={publicKey}
+                    urlEndpoint={urlEndpoint}
+                    transformationPosition="path"
+                    authenticationEndpoint={authenticationEndpoint}>
 
-            <IKUpload
-                fileName="test-upload.png"
-                onError={onError}
-                onSuccess={onSuccess}
-            />
-        </IKContext>
+                    <IKUpload
+                        fileName="test-upload.png"
+                        onError={onError}
+                        onSuccess={onSuccess}
+                    />
+                </IKContext>
+            </div>
+        </>
     );
 }
 
