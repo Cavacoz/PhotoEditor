@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "./Crop";
 
-const EasyCrop = ({ imgSource }) => {
+const EasyCrop = ({ imgSource, setImageSource, setIsCropping }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -23,6 +23,8 @@ const EasyCrop = ({ imgSource }) => {
       );
       console.log("donee", { croppedImage });
       setCroppedImage(croppedImage);
+      setImageSource(croppedImage);
+      setIsCropping(false);
     } catch (e) {
       console.error(e);
     }
@@ -34,14 +36,6 @@ const EasyCrop = ({ imgSource }) => {
 
   return (
     <div>
-      <button
-        style={{
-          display: imgSource === null || croppedImage !== null ? "none" : "block", position: "relative", zIndex: 1
-        }}
-        onClick={showCroppedImage}
-      >
-        Crop
-      </button>
       <div
         className="container"
         style={{
@@ -66,12 +60,14 @@ const EasyCrop = ({ imgSource }) => {
           />
         </div>
       </div>
-      <div className="cropped-image-container">
-        {croppedImage && (
-          <img className="cropped-image" src={croppedImage} alt="cropped" />
-        )}
-        {croppedImage && <button onClick={onClose}>close</button>}
-      </div>
+      <button
+        style={{
+          display: imgSource === null || croppedImage !== null ? "none" : "block", position: "relative", zIndex: 1
+        }}
+        onClick={showCroppedImage}
+      >
+        Crop
+      </button>
     </div>
   );
 };
