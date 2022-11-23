@@ -1,6 +1,6 @@
 import { baseUrl } from '../shared/baseUrl';
 
-export const loginUser = (creds, setAuth) => {
+export const loginUser = (creds) => {
     return fetch(baseUrl + 'users/api/login', {
         method: 'POST',
         headers: {
@@ -11,25 +11,20 @@ export const loginUser = (creds, setAuth) => {
         .then((response) => response.json())
         .then((response) => {
             if (response.success) {
-                setAuth(response.user);
-                console.log(response.user);
                 localStorage.setItem('token', response.token);
+                return response.user;
             }
         })
     // handle error
 }
 
 export const signUpUser = (regInfo) => {
-
     const newUser = {
         firstname: regInfo.firstname,
         lastname: regInfo.lastname,
         username: regInfo.email,
         password: regInfo.password
     }
-
-    console.log('api',newUser);
-    console.log('stringify', JSON.stringify(newUser))
     return fetch(baseUrl + 'users/api/signup', {
         method: 'POST',
         headers: {

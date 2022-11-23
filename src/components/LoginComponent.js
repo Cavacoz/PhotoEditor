@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
+import { loginUser } from "./ApiCalls";
+
 const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 
-const Login = ({ loginUser, setAuth }) => {
+const Login = ({ auth, setAuth }) => {
 
     const navigate = useNavigate();
 
@@ -13,7 +15,11 @@ const Login = ({ loginUser, setAuth }) => {
     const [password, setPassword] = useState("");
 
     function handleLoginClick() {
-        loginUser({ username: email, password: password }, setAuth);
+        loginUser({ username: email, password: password })
+            .then(user => {
+                setAuth(user);
+                console.log('auth store', auth)
+            })
         navigate('/home');
     }
 
