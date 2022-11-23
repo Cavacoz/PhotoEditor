@@ -142,25 +142,6 @@ const Canvas = (props) => {
     function clearImage() {
         props.clearImage();
     }
-    function cropClicked() {
-        switch (cropOption) {
-            case 'square':
-                const ctx = canvas.current.getContext('2d');
-                var hRatio = CANVAS_WITDH / (img.naturalWidth - 200);
-                var vRatio = CANVAS_HEIGHT / (img.naturalHeight - 200);
-                var ratio = Math.min(hRatio, vRatio);
-                var centerShift_x = (CANVAS_WITDH - (img.naturalWidth - 200) * ratio) / 2;
-                var centerShift_y = (CANVAS_HEIGHT - (img.naturalHeight - 200) * ratio) / 2;
-                ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-                ctx.drawImage(img,
-                    100, 100, img.naturalWidth - 200, img.naturalHeight - 200,
-                    centerShift_x, centerShift_y, (img.naturalWidth - 200) * ratio, (img.naturalHeight - 200) * ratio);
-                var imgData = ctx.getImageData(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
-                ctx.putImageData(imgData, CANVAS_WITDH, CANVAS_HEIGHT);
-                setImageSource(canvas.current.toDataURL('image/png'));
-                break;
-        }
-    }
     function addText() {
         const ctx = textCanvas.current.getContext('2d');
         var text = {
@@ -253,7 +234,7 @@ const Canvas = (props) => {
             <div className='row canvas'>
                 <div className='col-10 top-wrapper-image'>
                     {isCropping ?
-                        <EasyCrop imgSource={imgSource} />
+                        <EasyCrop imgSource={imgSource} setImageSource={setImageSource} setIsCropping={setIsCropping}/>
                         :
                         <>
                             <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
@@ -278,7 +259,7 @@ const Canvas = (props) => {
                 </div>
                 <div className="row">
                     {frameRowOpen ?
-                        <Frames imgSource={props.imgSource}
+                        <Frames imgSource={imgSource}
                             framePath={framePath}
                             setFramePath={setFramePath}
                             frameRow={{ frameRowOpen, setFrameRow }}
@@ -288,7 +269,7 @@ const Canvas = (props) => {
                         <></>
                     }
                     {filtersRowOpen ?
-                        <Filters imgSource={props.imgSource}
+                        <Filters imgSource={imgSource}
                             filterClass={filterClass}
                             setFilterClass={setFilterClass}
                             filterRow={{ filtersRowOpen, setFiltersRow }} />
@@ -305,9 +286,6 @@ const Canvas = (props) => {
                                     <option value="ellipse">Ellipse</option>
                                     <option value="triangle">Triangle</option>
                                 </Input>
-                            </div>
-                            <div className="col-2 text-info-button">
-                                <Button onClick={cropClicked}>Crop it</Button>
                             </div>
                         </>
                         :
