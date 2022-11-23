@@ -25,6 +25,14 @@ collectionRouter.get('/auth', cors.corsWithOptions, function (req, res, next) {
 });
 
 collectionRouter.get('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {
+
+    Images.find({ user: req.user._id })
+        .then((imgs) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(imgs);
+        }, (err) => next(err))
+        .catch((err) => next(err));
 });
 
 collectionRouter.post('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {

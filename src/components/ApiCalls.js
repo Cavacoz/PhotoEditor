@@ -19,6 +19,20 @@ export const loginUser = (creds, setAuth) => {
     // handle error
 }
 
+export const fetchImages = () => {
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    return fetch(baseUrl + 'mycollection', {
+        headers: {
+            'Authorization': bearer
+        }
+    })
+        .then(response => response.json())
+        .then((response) => {
+            console.log('apicall', response);
+            return response;
+        })
+}
+
 export const postImage = (imgUrl) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const img = {
