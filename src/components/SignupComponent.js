@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Form, FormGroup, Label, Input, Col, Button } from "reactstrap";
+import { signUpUser } from "./ApiCalls";
+import { useNavigate } from "react-router-dom";
 
 const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 const Signup = (props) => {
+
+    const navigate = useNavigate();
 
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
@@ -12,10 +16,9 @@ const Signup = (props) => {
     const [passwordv, setPasswordV] = useState("");
 
     function handleSubmitClick() {
-        console.log(firstname);
-        console.log(lastname);
-        console.log(email);
-        console.log(password);
+        signUpUser({ firstname: firstname, lastname: lastname, email: email, password: password });
+        //needs error handler
+        navigate('/login');
     }
 
     return (

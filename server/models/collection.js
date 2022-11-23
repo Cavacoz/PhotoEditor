@@ -6,8 +6,8 @@ var Images = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    urls: {
-        type: [String]
+    url: {
+        type: String
     }
 })
 

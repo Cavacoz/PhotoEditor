@@ -1,6 +1,8 @@
 var express = require('express');
 var ImageKit = require('imagekit');
 
+const authenticate = require('../authenticate')
+
 const bodyParser = require('body-parser');
 var User = require('../models/user');
 var cors = require('./cors');
@@ -22,10 +24,27 @@ collectionRouter.get('/auth', cors.corsWithOptions, function (req, res, next) {
     res.send(result);
 });
 
-collectionRouter.get('/', cors.corsWithOptions, function (req, res, next) {
+collectionRouter.get('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {
+
+    Images.find({ user: req.user._id })
+        .then((imgs) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(imgs);
+        }, (err) => next(err))
+        .catch((err) => next(err));
 });
 
-collectionRouter.post('/', cors.corsWithOptions, function (req, res, next) {
+collectionRouter.post('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {
+    req.body.user = req.user._id;
+    Images.create(req.body)
+        .then((image) => {
+            console.log('Image added to database ', image);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(image);
+        }, (err) => next(err))
+        .catch((err) => next(err));
 });
 
 module.exports = collectionRouter;
