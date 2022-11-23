@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IKImage, IKContext, IKUpload } from 'imagekitio-react';
 import { baseUrl } from '../shared/baseUrl';
+import { postImage } from "./ApiCalls";
 
 const MyCollection = (props) => {
 
@@ -16,6 +17,7 @@ const MyCollection = (props) => {
 
     const onSuccess = res => {
         console.log("Success", res);
+        postImage(res.url);
     };
 
     return (
