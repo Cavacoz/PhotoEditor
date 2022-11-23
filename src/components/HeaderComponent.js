@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Navbar, Nav, NavbarBrand, NavItem, Button } from "reactstrap";
 
-const Header = (props) => {
+const Header = ({auth, setAuth}) => {
 
     const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const Header = (props) => {
     }
 
     function handleLogoutClick() {
-        props.setAuth([]);
+        setAuth([]);
         localStorage.removeItem('token');
         localStorage.removeItem('creds');
         navigate("/home")
@@ -38,7 +38,7 @@ const Header = (props) => {
                 </NavItem>
             </Nav>
             <Nav navbar style={{ gap: 10 }}>
-                {!props.auth.isAuthenticated ?
+                {!auth.isAuthenticated ?
                     <>
                         <NavItem>
                             <Button onClick={handleLoginClick} outline>
@@ -52,14 +52,12 @@ const Header = (props) => {
                         </NavItem>
                     </>
                     :
-                    <>
-                        <NavItem>
-                            Hello, {props.auth.firstname} {props.auth.lastname}!
-                            <Button onClick={handleLogoutClick} outline>
-                                Logout
-                            </Button>
-                        </NavItem>
-                    </>
+                    <NavItem>
+                        Hello, {auth.firstname} {auth.lastname}!
+                        <Button onClick={handleLogoutClick} outline>
+                            Logout
+                        </Button>
+                    </NavItem>
                 }
             </Nav>
         </Navbar>

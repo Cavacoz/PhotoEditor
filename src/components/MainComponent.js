@@ -22,27 +22,15 @@ const Main = (props) => {
             },
             body: JSON.stringify(creds)
         })
-            .then(response => {
-                if (response.ok) {
-                    return response;
-                } else {
-                    var error = new Error('Error ' + response.status + ': ' + response.statusText);
-                    error.response = response;
-                    throw error;
-                }
-            },
-                error => {
-                    throw error;
-                })
             .then((response) => response.json())
             .then((response) => {
                 if (response.success) {
                     setAuth(response.user);
                     console.log(response.user);
                     localStorage.setItem('token', response.token);
-                    localStorage.setItem('creds', JSON.stringify(creds));
                 }
             })
+            // handle error
     }
 
     return (
