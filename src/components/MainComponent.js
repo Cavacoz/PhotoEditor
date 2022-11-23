@@ -22,7 +22,7 @@ const Main = (props) => {
                 <Route path="/login" element={<Login loginUser={loginUser} setAuth={setAuth} />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/photoeditor" element={<PhotoEditor auth={auth} />} />
-                <Route path="/mycollection" element={<MyCollection />} />
+                <Route path="/mycollection" element={<MyCollection auth={auth}/>} />
                 <Route path="/home" element={<Home />} />
                 <Route path='*' element={<Navigate to="/home" />} />
             </Routes >
