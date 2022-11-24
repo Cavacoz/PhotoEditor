@@ -52,12 +52,14 @@ app.use(passport.initialize());
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 app.use('/mycollection', collectionRouter);
 
 app.use('/users', usersRouter);
+
+app.use('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 
