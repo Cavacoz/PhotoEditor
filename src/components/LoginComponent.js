@@ -16,7 +16,7 @@ const Login = ({ auth, setAuth }) => {
 
     function handleLoginClick() {
         loginUser({ username: email, password: password })
-            .then(user => {
+            .then(user => { console.log(user);
                 setAuth(user);
                 console.log('auth store', auth)
             })

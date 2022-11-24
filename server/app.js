@@ -23,13 +23,26 @@ const connect = mongoose.connect(config.mongoUrl)
 
 var app = express();
 
-app.all('*', (req, res, next) => {
+app.use(express.static(path.join(__dirname, 'build')));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
+/**
+ * app.all('*', (req, res, next) => {
   if (req.secure) {
     return next();
   } else {
     //Redirect to the secure port of the server
     res.redirect(307, 'https://' + req.hostname + ':' + app.get('secPort') + req.url);
   }
+});
+ */
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.warn(`App listening on http://localhost:${PORT}`);
 });
 
 // view engine setup
@@ -42,6 +55,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(passport.initialize());
+
+
 
 app.use('/', indexRouter);
 app.use('/mycollection', collectionRouter);

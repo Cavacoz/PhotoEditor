@@ -17,12 +17,12 @@ const Header = ({auth, setAuth}) => {
         setAuth([]);
         localStorage.removeItem('token');
         localStorage.removeItem('creds');
-        navigate("/home")
+        navigate("/")
     }
 
     return (
         <Navbar className="header" container="md" expand>
-            <NavbarBrand className="mr-auto" href="/home">
+            <NavbarBrand className="mr-auto" href="/">
                 Photo Editor
             </NavbarBrand>
             <Nav className="me-auto" navbar>
