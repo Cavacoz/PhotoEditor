@@ -14,7 +14,9 @@ var collectionRouter = require('./routes/collections');
 
 const mongoose = require('mongoose');
 
-const connect = mongoose.connect(config.mongoUrl)
+const mongo_uri = process.env.MONGODB_URI;
+
+const connect = mongoose.connect(mongo_uri)
   .then((db) => {
     console.log('Data base connected');
   }, (err) => {
