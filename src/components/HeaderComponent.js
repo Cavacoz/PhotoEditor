@@ -38,7 +38,7 @@ const Header = ({auth, setAuth}) => {
                 </NavItem>
             </Nav>
             <Nav navbar style={{ gap: 10 }}>
-                {!auth.isAuthenticated ?
+                {!auth?.isAuthenticated ?
                     <>
                         <NavItem>
                             <Button onClick={handleLoginClick} outline>
