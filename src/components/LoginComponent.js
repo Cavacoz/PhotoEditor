@@ -3,7 +3,6 @@ import { Button, Form, FormGroup, Label, Input, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 
 import { loginUser } from "./ApiCalls";
-import { response } from "../../server/app";
 
 const validEmail = (val) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
@@ -17,7 +16,7 @@ const Login = ({ auth, setAuth }) => {
 
     function handleLoginClick() {
         loginUser({ username: email, password: password })
-            .then(reponse =>  response.json())
+            .then(response =>  response.json())
             .then(user => {
                 setAuth(user);
                 console.log('auth store', auth)
