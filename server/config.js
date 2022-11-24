@@ -1,6 +1,6 @@
 module.exports = {
     'secretKey': '12345-67890-09876-54321',
-    'mongoUrl': 'mongodb://127.0.0.1:27017/photoEditor',
+    'mongoUrl': '//photo-editor-heroku.herokuapp.com/photoEditor',
     'user': 'ruiahau@hotmail.com',
     'pass': 'AhauR580'
 }
