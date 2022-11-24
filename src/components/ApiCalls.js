@@ -11,6 +11,7 @@ export const loginUser = (creds) => {
         .then((response) => response.json())
         .then((response) => {
             if (response.success) {
+                console.log(response)
                 localStorage.setItem('token', response.token);
                 return response.user;
             }

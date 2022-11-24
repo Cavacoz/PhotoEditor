@@ -16,11 +16,10 @@ const Login = ({ auth, setAuth }) => {
 
     function handleLoginClick() {
         loginUser({ username: email, password: password })
-            .then(response =>  response.json())
-            .then(user => {
+            .then(user => { console.log(user);
                 setAuth(user);
                 console.log('auth store', auth)
-            })                
+            })
         navigate('/home');
     }
 
