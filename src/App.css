@@ -52,6 +52,10 @@
   text-align: left;
 }
 
+.filters-div{
+  padding-top: 15;
+}
+
 .filter-item--selected {
   background-color: rgba(56, 56, 255, 0.2);
   border-radius: 10px;

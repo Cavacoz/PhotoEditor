@@ -71,7 +71,7 @@ const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
                     <Slider {...settings} >
                         {filters.map((filter, index) => {
                             return (
-                                <div key={index} style={{ paddingTop: 15 }}>
+                                <div key={index} className="filters-div">
                                     <div
                                         className={`filter-item ${filterClass === filter.effects ? 'filter-item--selected' : ''}`}
 
