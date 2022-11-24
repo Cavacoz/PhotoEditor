@@ -217,7 +217,7 @@ const Canvas = (props) => {
                 </div>
                 <div className="col-2 options-buttons">
                     <Button onClick={() => clearImage()}><FontAwesomeIcon icon={faTrashCan} /></Button>
-                    {props.auth.isAuthenticated ?
+                    {props.auth?.isAuthenticated ?
                         <>
                             <a id="download_image" href="some_link" onClick={(e) => {
                                 downloadImage(e)

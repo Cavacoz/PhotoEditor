@@ -30,7 +30,7 @@ const MyCollection = ({ auth }) => {
 
     return (
         <>
-            {auth.isAuthenticated ?
+            {auth?.isAuthenticated ?
                 <div className='container mt-4'>
                     <div className='row' style={{ textAlign: 'left' }}>
                         <h1>My Collection</h1>
