@@ -210,7 +210,7 @@ const Canvas = (props) => {
     }
     return (
         <>
-            <div className="row" style={{ textAlign: "left" }}>
+            <div className="row image-name-row">
                 <div className="col-10">
                     <h3>Image Name: </h3>
                     <h5>{props.imgName}</h5>
