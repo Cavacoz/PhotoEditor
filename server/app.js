@@ -23,12 +23,6 @@ const connect = mongoose.connect(config.mongoUrl)
 
 var app = express();
 
-app.use(express.static(path.join(__dirname, 'build')));
-
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 /**
  * app.all('*', (req, res, next) => {
   if (req.secure) {
@@ -56,9 +50,11 @@ app.use(cookieParser());
 
 app.use(passport.initialize());
 
+app.use(express.static(path.join(__dirname, 'build')));
 
-
-//app.use('/', indexRouter);
+app.use('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 app.use('/mycollection', collectionRouter);
 
 app.use('/users', usersRouter);
