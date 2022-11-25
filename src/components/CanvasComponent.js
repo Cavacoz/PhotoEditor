@@ -49,7 +49,6 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow, cropOption }) =>
 }
 
 const Canvas = (props) => {
-
     const [imgSource, setImageSource] = useState(props.imgSource);
 
     const [textToInsert, setTextToInsert] = useState();
@@ -93,7 +92,7 @@ const Canvas = (props) => {
     useEffect(() => {
         img.onload = function () {
             console.log('dei load na imagem')
-            const ctx = canvas.current.getContext('2d');
+            const ctx = canvas?.current.getContext('2d');
             var hRatio = CANVAS_WITDH / img.naturalWidth;
             var vRatio = CANVAS_HEIGHT / img.naturalHeight;
             var ratio = Math.min(hRatio, vRatio);
@@ -104,7 +103,7 @@ const Canvas = (props) => {
                 centerShift_x, centerShift_y,
                 img.naturalWidth * ratio, img.naturalHeight * ratio)
         }
-    }, [])
+    }, [isCropping])
     useEffect(() => {
         const ctx = canvas.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT)
@@ -115,7 +114,7 @@ const Canvas = (props) => {
             img.naturalWidth * ratio, img.naturalHeight * ratio)
     }, [filterClass])
     useEffect(() => {
-        const ctx = frameCanvas.current.getContext('2d');
+        const ctx = frameCanvas?.current.getContext('2d');
         ctx.clearRect(0, 0, CANVAS_WITDH, CANVAS_HEIGHT);
         var hRatio = CANVAS_WITDH / frame.naturalWidth;
         var vRatio = CANVAS_HEIGHT / frame.naturalHeight;
@@ -220,8 +219,9 @@ const Canvas = (props) => {
                     {props.auth?.isAuthenticated ?
                         <>
                             <a id="download_image" href="some_link" onClick={(e) => {
-                                downloadImage(e)
                                 mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                                downloadImage(e)
+
                             }}>
                                 <Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
                             <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
@@ -234,7 +234,7 @@ const Canvas = (props) => {
             <div className='row canvas'>
                 <div className='col-10 top-wrapper-image'>
                     {isCropping ?
-                        <EasyCrop imgSource={imgSource} setImageSource={setImageSource} setIsCropping={setIsCropping}/>
+                        <EasyCrop imgSource={imgSource} setImageSource={setImageSource} setIsCropping={setIsCropping} />
                         :
                         <>
                             <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
@@ -255,16 +255,19 @@ const Canvas = (props) => {
                         filterRow={{ filtersRowOpen, setFiltersRow }}
                         cropRow={{ cropRowOpen, setCropRow }}
                         textRow={{ textRowOpen, setTextRow }}
-                        cropOption={{ isCropping, setIsCropping }} />
+                        cropOption={{ isCropping, setIsCropping }}
+                    />
                 </div>
                 <div className="row">
                     {frameRowOpen ?
                         <Frames imgSource={imgSource}
+                            frame={frame}
                             framePath={framePath}
                             setFramePath={setFramePath}
                             frameRow={{ frameRowOpen, setFrameRow }}
                             canvas={canvas}
-                            canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }} />
+                            canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }}
+                            setImageSource={setImageSource} />
                         :
                         <></>
                     }
@@ -272,7 +275,9 @@ const Canvas = (props) => {
                         <Filters imgSource={imgSource}
                             filterClass={filterClass}
                             setFilterClass={setFilterClass}
-                            filterRow={{ filtersRowOpen, setFiltersRow }} />
+                            filterRow={{ filtersRowOpen, setFiltersRow }}
+                            setImageSource={setImageSource}
+                            canvas={canvas} />
                         :
                         <></>
                     }
@@ -282,9 +287,9 @@ const Canvas = (props) => {
                                 <Label><strong>Crop option</strong></Label>
                                 <Input type="select" onChange={(e) => setCropOption(e.target.value)}>
                                     <option value="square">Square</option>
-                                    <option value="circle">Circle</option>
-                                    <option value="ellipse">Ellipse</option>
-                                    <option value="triangle">Triangle</option>
+                                    <option disabled value="circle">Circle</option>
+                                    <option disabled value="ellipse">Ellipse</option>
+                                    <option disabled value="triangle">Triangle</option>
                                 </Input>
                             </div>
                         </>

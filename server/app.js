@@ -16,7 +16,7 @@ const mongoose = require('mongoose');
 
 const mongo_uri = process.env.MONGODB_URI;
 
-const connect = mongoose.connect(mongo_uri)
+const connect = mongoose.connect(mongo_uri || config.mongoUrl)
   .then((db) => {
     console.log('Data base connected');
   }, (err) => {
