@@ -77,3 +77,24 @@ export const postImage = (imgUrl) => {
         })
     // handle error
 }
+
+export const postImageToEmail = (imgData) => {
+    console.log('post image to email')
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const stringImg = { imgData };
+    return fetch(baseUrl + 'imagetoemail', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        body: JSON.stringify(stringImg)
+    })
+        .then((response) => response.json())
+        .then((response) => {
+            if (response.success) {
+                console.log(response);
+            }
+        })
+    //handle error
+}
