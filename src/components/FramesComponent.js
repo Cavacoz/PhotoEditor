@@ -23,7 +23,7 @@ margin: auto;
 }
 `
 
-const Frames = ({ imgSource, framePath, setFramePath, frameRow }) => {
+const Frames = ({ imgSource, framePath, setFramePath, frameRow, canvasDimensions, canvas, frame, setImageSource }) => {
 
     const frames = [
         {
@@ -62,6 +62,13 @@ const Frames = ({ imgSource, framePath, setFramePath, frameRow }) => {
     }
 
     function handleApplyClick() {
+        var ctxC = canvas.current.getContext('2d');
+        ctxC.filter = 'contrast(1) sepia(0) blur(0px)';
+        ctxC.drawImage(frame, 0, 0, canvasDimensions.CANVAS_WITDH, canvasDimensions.CANVAS_HEIGHT);
+        var dataURL = canvas?.current.toDataURL('image/png');
+        setImageSource(dataURL);
+        setFramePath('');
+        console.log('applied frame');
         frameRow.setFrameRow(false);
     }
 

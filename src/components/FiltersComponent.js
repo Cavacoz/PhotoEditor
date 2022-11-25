@@ -22,7 +22,7 @@ margin: auto;
 }
 `
 
-const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
+const Filters = ({ imgSource, filterClass, setFilterClass, filterRow, setImageSource, canvas }) => {
 
     const filters = [
         {
@@ -61,6 +61,9 @@ const Filters = ({ imgSource, filterClass, setFilterClass, filterRow }) => {
     }
 
     function handleApplyClick() {
+        var dataURL = canvas?.current.toDataURL('image/png');
+        setImageSource(dataURL);
+        console.log('applied filter')
         filterRow.setFiltersRow(false);
     }
 
