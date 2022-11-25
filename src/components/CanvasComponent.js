@@ -9,6 +9,8 @@ import Filters from "./FiltersComponent";
 import './styles/instagram.css'
 import EasyCrop from "./EasyCrop";
 
+import { postImageToEmail } from "./ApiCalls";
+
 const FramesFilters = ({ frameRow, filterRow, cropRow, textRow, cropOption }) => {
     function handleFramesClicked() {
         frameRow.setFrameRow(!frameRow.frameRowOpen);
@@ -207,6 +209,13 @@ const Canvas = (props) => {
         let image = finalImageCanvas.current.toDataURL('image/png');
         link.setAttribute('href', image);
     }
+    function sendPhotoToEmail() {
+        console.log('clicked')
+        var imgData = finalImageCanvas?.current.toDataURL('image/png');
+        postImageToEmail(imgData);
+        console.log('clicked after')
+    }
+
     return (
         <>
             <div className="row image-name-row">
@@ -224,7 +233,10 @@ const Canvas = (props) => {
 
                             }}>
                                 <Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
-                            <Button><FontAwesomeIcon icon={faShareNodes} /></Button>
+                            <Button><FontAwesomeIcon onClick={(e) => {
+                                mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                                sendPhotoToEmail()
+                            }} icon={faShareNodes} /></Button>
                         </>
                         :
                         <></>
