@@ -41,12 +41,10 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
 exports.verifyUser = passport.authenticate('jwt', { session: false });
 
 const transport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+    service: 'hotmail',
     auth: {
-        user: 'rui.cavaco@codex-soft.com',
-        pass: 'SamsungR580'
+        user: config.user,
+        pass: config.pass
     }
 });
 
