@@ -56,10 +56,10 @@ export const fetchImages = () => {
         })
 }
 
-export const postImage = (imgUrl) => {
+export const postImage = (imgData) => {
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const img = {
-        url: imgUrl
+        imgData: imgData
     }
     return fetch(baseUrl + 'mycollection', {
         method: 'POST',
@@ -68,6 +68,28 @@ export const postImage = (imgUrl) => {
             'Authorization': bearer
         },
         body: JSON.stringify(img)
+    })
+        .then((response) => response.json())
+        .then((response) => {
+            if (response.success) {
+                console.log(response);
+            }
+        })
+    // handle error
+}
+
+export const deleteImage = (url) => {
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+    const urlImg = {
+        url: url
+    }
+    return fetch(baseUrl + 'mycollection', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        body: JSON.stringify(urlImg)
     })
         .then((response) => response.json())
         .then((response) => {

@@ -2,14 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Label } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVectorSquare, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVectorSquare, faShareNodes, faDownload, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import Frames from "./FramesComponent";
 import Filters from "./FiltersComponent";
 
 import './styles/instagram.css'
 import EasyCrop from "./EasyCrop";
 
-import { postImageToEmail } from "./ApiCalls";
+import { postImage, postImageToEmail } from "./ApiCalls";
 
 const FramesFilters = ({ frameRow, filterRow, cropRow, textRow, cropOption }) => {
     function handleFramesClicked() {
@@ -215,6 +215,12 @@ const Canvas = (props) => {
         postImageToEmail(imgData);
         console.log('clicked after')
     }
+    function saveToCollection() {
+        console.log('save to collection begin')
+        var imgData = finalImageCanvas?.current.toDataURL('image/png');
+        postImage(imgData);
+        console.log('save to collection end')
+    }
 
     return (
         <>
@@ -232,11 +238,16 @@ const Canvas = (props) => {
                                 downloadImage(e)
 
                             }}>
-                                <Button><FontAwesomeIcon icon={faFloppyDisk} /></Button></a>
+                                <Button><FontAwesomeIcon icon={faDownload} /></Button></a>
                             <Button><FontAwesomeIcon onClick={(e) => {
                                 mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
                                 sendPhotoToEmail()
-                            }} icon={faShareNodes} /></Button>
+                            }} icon={faEnvelope} /></Button>
+                            <Button onClick={() => {
+                                mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
+                                saveToCollection()
+                            }
+                            }><FontAwesomeIcon icon={faFloppyDisk} /></Button>
                         </>
                         :
                         <></>

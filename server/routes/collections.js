@@ -11,7 +11,7 @@ var Images = require('../models/collection');
 var collectionRouter = express.Router();
 collectionRouter.use(bodyParser.json());
 
-const imagekit = new ImageKit({
+var imagekit = new ImageKit({
     urlEndpoint: 'https://ik.imagekit.io/nny7nrtku',
     publicKey: 'public_Q4+YMPWdnNO13CXq1ZF4tm5j0ro=',
     privateKey: 'private_uSBxTRxiUf3VdwK4L2cx9OLpWlI='
@@ -37,14 +37,31 @@ collectionRouter.get('/', cors.corsWithOptions, authenticate.verifyUser, functio
 
 collectionRouter.post('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {
     req.body.user = req.user._id;
-    Images.create(req.body)
-        .then((image) => {
-            console.log('Image added to database ', image);
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json(image);
-        }, (err) => next(err))
-        .catch((err) => next(err));
+    imagekit.upload({
+        file: req.body.imgData, //required
+        fileName: "my_file_name.png",   //required
+    }).then(response => {
+        req.body.url = response.url
+        Images.create(req.body)
+            .then((image) => {
+                console.log('Image added to database ', image);
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(image);
+            }, (err) => next(err))
+            .catch((err) => next(err));
+        console.log(response);
+    }).catch(error => {
+        console.log(error);
+    });
+});
+
+collectionRouter.delete('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {
+    Images.deleteOne({ url: req.body.url }, function (err, obj) {
+        if (err) throw err;
+        console.log('1 document deleted');
+        console.log(obj);
+    });
 });
 
 module.exports = collectionRouter;
