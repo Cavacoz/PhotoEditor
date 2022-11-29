@@ -12,9 +12,7 @@ imageToEmailRouter.options('*', cors.corsWithOptions, (req, res) => { res.sendSt
 
 imageToEmailRouter.post('/', cors.corsWithOptions, authenticate.verifyUser, function (req, res, next) {
     try {
-        console.log(req.body.imgData)
         const user = req.user;
-        //const imgData = req.body.stringImg;
         console.log(user);
         authenticate.sendPhotoToEmail(user.username, req.body.imgData);
         res.statusCode = 200;
