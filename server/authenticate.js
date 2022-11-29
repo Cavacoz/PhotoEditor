@@ -50,6 +50,8 @@ const transport = nodemailer.createTransport({
 
 exports.sendPhotoToEmail = (email, img) => {
     console.log('email is being sent')
+    console.log(config.user);
+    console.log(config.pass);
     transport.sendMail({
         from: config.user,
         to: email,
