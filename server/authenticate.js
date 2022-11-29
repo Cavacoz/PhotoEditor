@@ -41,7 +41,7 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
 exports.verifyUser = passport.authenticate('jwt', { session: false });
 
 const transport = nodemailer.createTransport({
-    service: "Hotmail",
+    service: "Outlook",
     auth: {
         user: config.user,
         pass: config.pass
