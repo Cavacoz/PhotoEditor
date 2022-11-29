@@ -50,7 +50,7 @@ const transport = nodemailer.createTransport({
         pass: config.pass
     },
     tls: {
-        ciphers: 'SSLv3'
+        rejectUnauthorized: false
     }
 });
 
