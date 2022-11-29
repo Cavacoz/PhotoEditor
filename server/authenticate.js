@@ -49,6 +49,7 @@ const transport = nodemailer.createTransport({
 });
 
 exports.sendPhotoToEmail = (email, img) => {
+    console.log('email is being sent')
     transport.sendMail({
         from: config.user,
         to: email,
