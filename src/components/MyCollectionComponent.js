@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { IKImage, IKContext, IKUpload } from 'imagekitio-react';
 import { baseUrl } from '../shared/baseUrl';
-import { fetchImages, postImage } from "./ApiCalls";
+import { fetchImages, deleteImage } from "./ApiCalls";
+import { Button } from "reactstrap";
 
 const MyCollection = ({ auth }) => {
 
@@ -19,14 +20,10 @@ const MyCollection = ({ auth }) => {
             })
     }, [])
 
-    const onError = err => {
-        console.log("Error", err);
-    };
-
-    const onSuccess = res => {
-        console.log("Success", res);
-        postImage(res.url);
-    };
+    function deletePhoto(e) {
+        console.log(e.target.value);
+        deleteImage(e.target.value);
+    }
 
     return (
         <>
@@ -50,14 +47,10 @@ const MyCollection = ({ auth }) => {
                                                 width: 150
                                             }]}
                                         />
+                                        <Button onClick={deletePhoto} value={img.url}>Del</Button>
                                     </div>
                                 );
                             })}
-                            <IKUpload
-                                fileName="test-upload.png"
-                                onError={onError}
-                                onSuccess={onSuccess}
-                            />
                         </IKContext>
                     </div>
                 </div>
