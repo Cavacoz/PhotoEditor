@@ -79,7 +79,7 @@ export const postImage = (imgUrl) => {
 }
 
 export const postImageToEmail = (imgData) => {
-    console.log('post image to email')
+    console.log(imgData)
     const bearer = 'Bearer ' + localStorage.getItem('token');
     const stringImg = { imgData };
     return fetch(baseUrl + 'imagetoemail', {

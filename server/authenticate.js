@@ -55,8 +55,9 @@ exports.sendPhotoToEmail = (email, img) => {
         subject: 'Your Image',
         attachments: [
             {   // encoded string as an attachment
-                filename: 'Your Image.png',
-                path: img
+                filename: 'yourPhoto.png',
+                contentType: 'image/png',
+                content: new Buffer.from(img.split("base64,")[1], "base64"),
             }
         ],
         text: 'Thank you for using PhotoEditor.'
