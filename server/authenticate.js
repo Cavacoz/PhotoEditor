@@ -41,10 +41,10 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
 exports.verifyUser = passport.authenticate('jwt', { session: false });
 
 const transport = nodemailer.createTransport({
-    host: 'smtp.office365.com',
-    service: 'hotmail',
+    host: 'outlook.office365.com',
+    service: 'outlook',
     secureConnection: false,
-    port: 587,
+    port: 993,
     auth: {
         user: config.user,
         pass: config.pass
