@@ -37,7 +37,7 @@ const Header = ({auth, setAuth}) => {
                     </NavLink>
                 </NavItem>
             </Nav>
-            <Nav navbar style={{ gap: 10 }}>
+            <Nav navbar className="navbar-gap">
                 {!auth?.isAuthenticated ?
                     <>
                         <NavItem>

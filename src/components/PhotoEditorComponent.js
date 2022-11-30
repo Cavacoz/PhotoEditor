@@ -19,7 +19,7 @@ const PhotoEditor = (props) => {
     return (
         <>
             <div className='container mt-4'>
-                <div className='row' style={{ textAlign: 'left' }}>
+                <div className='row editor-h1'>
                     <h1>Editor</h1>
                 </div>
                 <hr />
@@ -30,7 +30,7 @@ const PhotoEditor = (props) => {
                     :
                     <>
                         <div className='row'>
-                            <h5 style={{ textAlign: 'start' }}>Choose your Photo to edit</h5>
+                            <h5 className='choose-photo-h5'>Choose your Photo to edit</h5>
                             <Input className='input-file' type="file" accept=".png, .jpg, .jpeg" onChange={handleImageInputChange} />
                         </div>
                     </>

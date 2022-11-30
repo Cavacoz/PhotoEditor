@@ -17,10 +17,31 @@
   background-color: rgba(0, 0, 255, .2);
 }
 
+.navbar-gap {
+  gap: 10px;
+}
+
+.photo-editor-row {
+  text-align: left;
+}
+
+.signup-container {
+  padding: 100px;
+}
+
 .login-form {
   border: 2px solid rgba(0, 0, 255, .2);
   border-radius: 10px;
   width: 650px;
+  padding: 20px;
+  width: 400px;
+}
+
+.signup-form {
+  border: 2px solid rgba(0, 0, 255, .2);
+  border-radius: 10px;
+  width: 650px;
+  padding: 20px;
 }
 
 .input-file {
@@ -28,10 +49,34 @@
   margin-left: 12px;
 }
 
+.login-container {
+  padding: 100px;
+}
+
+.editor-h1 {
+  text-align: left;
+}
+
+.row-collection {
+  text-align: left;
+}
+
+.choose-photo-h5 {
+  text-align: start;
+}
+
 .canvas {
   border: 2px solid rgba(0, 0, 255, .2);
   border-radius: 5px;
   padding: 25px;
+}
+
+.frame-name-div {
+  padding-top: 15px;
+}
+
+.frame-selection {
+  margin-left: 2px;
 }
 
 .options-buttons {
@@ -48,12 +93,12 @@
   row-gap: 10px;
 }
 
-.image-name-row{
+.image-name-row {
   text-align: left;
 }
 
-.filters-div{
-  padding-top: 15;
+.filters-div {
+  padding-top: 15px;
 }
 
 .filter-item--selected {
@@ -66,7 +111,7 @@
   height: 100%;
 }
 
-.crop-container{
+.crop-container {
   height: 500px;
 }
 

@@ -79,10 +79,9 @@ const Frames = ({ imgSource, framePath, setFramePath, frameRow, canvasDimensions
                     <Slider {...settings} >
                         {frames.map((frame) => {
                             return (
-                                <div key={frame.name} style={{ paddingTop: 15 }}>
+                                <div key={frame.name} className="frame-name-div">
                                     <div
-                                        className={`filter-item ${framePath === frame.src ? 'filter-item--selected' : ''}`}
-                                        style={{ marginLeft: 2 }}
+                                        className={`filter-item ${framePath === frame.src ? 'filter-item--selected frame-selection' : 'frame-selection'}`}
                                         onClick={() => setFramePath(frame.src)}>
                                         <div>
                                             <div className="filter-item__img">

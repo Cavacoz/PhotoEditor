@@ -77,7 +77,6 @@ const Filters = ({ imgSource, filterClass, setFilterClass, filterRow, setImageSo
                                 <div key={index} className="filters-div">
                                     <div
                                         className={`filter-item ${filterClass === filter.effects ? 'filter-item--selected' : ''}`}
-
                                         onClick={() => setFilterClass(filter.effects)}>
                                         <div>
                                             <div className="filter-item__img">

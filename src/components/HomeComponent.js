@@ -4,7 +4,7 @@ const Home = () => {
 
     return (
         <div className="container mt-4">
-            <div className='row' style={{ textAlign: 'left' }}>
+            <div className='row photo-editor-row'>
                 <h1>Photo Editor</h1>
             </div>
 

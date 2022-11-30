@@ -24,8 +24,8 @@ const Login = ({ auth, setAuth }) => {
     }
 
     return (
-        <div className="container" style={{ padding: 100 }}>
-            <Form className="container login-form" style={{ padding: 20, width: 400 }}>
+        <div className="container signup-container">
+            <Form className="container login-form">
                 <FormGroup row>
                     <Col sm={12}>
                         <h1 className="col-5">Login</h1>
