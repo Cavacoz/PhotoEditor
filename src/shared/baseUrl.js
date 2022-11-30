@@ -1,2 +1,2 @@
-export const baseUrl = 'http://localhost:3000/';
-//export const baseUrl = 'https://photo-editor-heroku.herokuapp.com/';
+//export const baseUrl = 'http://localhost:3000/';
+export const baseUrl = 'https://photo-editor-heroku.herokuapp.com/';
