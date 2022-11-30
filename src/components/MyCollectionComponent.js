@@ -34,7 +34,7 @@ const MyCollection = ({ auth }) => {
         <>
             {auth?.isAuthenticated ?
                 <div className='container mt-4'>
-                    <div className='row' style={{ textAlign: 'left' }}>
+                    <div className='row row-collection'>
                         <h1>My Collection</h1>
                     </div>
                     <div className="row">

@@ -22,8 +22,8 @@ const Signup = (props) => {
     }
 
     return (
-        <div className="container" style={{ padding: 100 }}>
-            <Form className="container login-form" style={{ padding: 20 }}>
+        <div className="container signup-container">
+            <Form className="container signup-form">
                 <FormGroup>
                     <FormGroup row>
                         <Col sm={12}>
