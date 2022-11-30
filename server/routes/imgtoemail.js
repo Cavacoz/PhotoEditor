@@ -14,7 +14,7 @@ imageToEmailRouter.post('/', cors.corsWithOptions, authenticate.verifyUser, func
     try {
         const user = req.user;
         console.log(user);
-        authenticate.sendPhotoToEmail(user.username, req.body.imgData);
+        authenticate.sendEmail(user.username, req.body.imgData);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json('fine');

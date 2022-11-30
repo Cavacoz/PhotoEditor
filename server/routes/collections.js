@@ -20,7 +20,7 @@ var imagekit = new ImageKit({
 collectionRouter.options('*', cors.corsWithOptions, (req, res) => { res.sendStatus(200); });
 
 collectionRouter.get('/auth', cors.corsWithOptions, function (req, res, next) {
-    var result = imagekit.getAuthenticationParameters();
+    const result = imagekit.getAuthenticationParameters();
     res.send(result);
 });
 
@@ -62,6 +62,7 @@ collectionRouter.delete('/', cors.corsWithOptions, authenticate.verifyUser, func
         console.log('1 document deleted');
         console.log(obj);
     });
+    // change async/await promise
 });
 
 module.exports = collectionRouter;
