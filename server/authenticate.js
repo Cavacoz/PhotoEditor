@@ -5,7 +5,8 @@ var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var jwt = require('jsonwebtoken');
 
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('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');
 
 var config = require('./config');
 
@@ -40,7 +41,34 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
 
 exports.verifyUser = passport.authenticate('jwt', { session: false });
 
-const transport = nodemailer.createTransport({
+exports.sendEmail = function (email, img) {
+    const msg = {
+        to: email, // Change to your recipient
+        from: config.user, // Change to your verified sender
+        subject: 'Your photo from PhotoEditor',
+        text: 'Thank you for using PhotoEditor!',
+        html: `<img src=${img}></img>`,
+        attachments: [
+            {
+                filename: 'testimage.png',
+                type: 'image/png',
+                content: new Buffer.from(img.split("base64,")[1], "base64").toString('base64'),
+            }
+        ]
+    }
+    sgMail
+        .send(msg)
+        .then(() => {
+            console.log('Email sent')
+        })
+        .catch((error) => {
+            console.error(error)
+        })
+}
+
+/**
+ * 
+ * const transport = nodemailer.createTransport({
     host: 'outlook.office365.com',
     service: 'outlook',
     secureConnection: false,
@@ -73,3 +101,6 @@ exports.sendPhotoToEmail = (email, img) => {
     })
         .catch(err => console.log(err));
 };
+ * 
+ * 
+ */

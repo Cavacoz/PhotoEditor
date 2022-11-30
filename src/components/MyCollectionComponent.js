@@ -20,9 +20,14 @@ const MyCollection = ({ auth }) => {
             })
     }, [])
 
-    function deletePhoto(e) {
+    async function deletePhoto(e) {
         console.log(e.target.value);
-        deleteImage(e.target.value);
+        await deleteImage(e.target.value);
+        fetchImages()
+            .then(imgs => {
+                setImgsUrls(imgs);
+                //console.log('component', imgsUrls);
+            })
     }
 
     return (
