@@ -47,7 +47,6 @@ exports.sendEmail = function (email, img) {
         from: config.user, // Change to your verified sender
         subject: 'Your photo from PhotoEditor',
         text: 'Thank you for using PhotoEditor!',
-        html: `<img src=${img}></img>`,
         attachments: [
             {
                 filename: 'testimage.png',

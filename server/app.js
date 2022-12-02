@@ -26,8 +26,6 @@ const connect = mongoose.connect(mongo_uri || config.mongoUrl)
 
 var app = express();
 
-
-
 /**
  * app.all('*', (req, res, next) => {
   if (req.secure) {
@@ -38,8 +36,6 @@ var app = express();
   }
 });
  */
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,12 +54,8 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-//app.use('/', indexRouter);
 app.use('/imagetoemail', imageToEmailRouter);
 app.use('/mycollection', collectionRouter);
-
-
-//app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 
