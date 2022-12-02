@@ -91,7 +91,8 @@ const Frames = ({ imgSource, framePath, setFramePath, frameRow, canvasDimensions
                                                 />
                                                 <img className="frame-image"
                                                     src={`${frame.src}`}
-                                                    height={100} width={145} />
+                                                    height={100} width={145}
+                                                    alt={frame.name} />
                                             </div>
                                             <div className="filter-item__name">
                                                 <p>

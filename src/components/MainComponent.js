@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import PhotoEditor from './PhotoEditorComponent';
 import Login from './LoginComponent';
@@ -8,7 +8,6 @@ import Home from './HomeComponent';
 import MyCollection from './MyCollectionComponent';
 
 const Main = (props) => {
-
     //has firstname, lastname and username/email
     const [auth, setAuth] = useState([]);
 

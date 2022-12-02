@@ -1,10 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Button, Input, Label } from "reactstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVectorSquare, faShareNodes, faDownload, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk, faTrashCan, faScissors, faFont, faWandMagicSparkles, faVectorSquare, faDownload, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import Frames from "./FramesComponent";
 import Filters from "./FiltersComponent";
+
+import { mergeCanvas, saveToCollection, sendPhotoToEmail, downloadImage } from "./utils.js/canvasFunc";
+
+import { ImageContext } from "../App";
 
 import './styles/instagram.css'
 import EasyCrop from "./EasyCrop";
@@ -51,7 +55,8 @@ const FramesFilters = ({ frameRow, filterRow, cropRow, textRow, cropOption }) =>
 }
 
 const Canvas = (props) => {
-    const [imgSource, setImageSource] = useState(props.imgSource);
+
+    const image = useContext(ImageContext);
 
     const [textToInsert, setTextToInsert] = useState();
     const [textColor, setTextColor] = useState('#ffffff');
@@ -81,7 +86,7 @@ const Canvas = (props) => {
     const finalImageCanvas = useRef(null);
 
     var img = new Image();
-    img.src = imgSource;
+    img.src = image.imgSource;
     const frame = new Image();
     frame.src = framePath;
 
@@ -93,7 +98,6 @@ const Canvas = (props) => {
 
     useEffect(() => {
         img.onload = function () {
-            console.log('dei load na imagem')
             const ctx = canvas?.current.getContext('2d');
             var hRatio = CANVAS_WITDH / img.naturalWidth;
             var vRatio = CANVAS_HEIGHT / img.naturalHeight;
@@ -128,12 +132,6 @@ const Canvas = (props) => {
             centerShift_x, centerShift_y,
             frame.naturalWidth * ratio, frame.naturalHeight * ratio)
     }, [framePath])
-    function mergeCanvas(targetCanvas, ...args) {
-        const ctx = targetCanvas.getContext('2d');
-        args.forEach(canvas => {
-            ctx.drawImage(canvas, 0, 0, targetCanvas.width, targetCanvas.height);
-        });
-    }
     function handleTextChange(e) {
         setTextToInsert(e.target.value);
     }
@@ -166,7 +164,6 @@ const Canvas = (props) => {
         }
     }
     function textHittest(x, y, textIndex) {
-        console.log('hit neste texto')
         var text = texts[textIndex];
         return (x >= text.x);
     }
@@ -176,7 +173,6 @@ const Canvas = (props) => {
         offsetY = textCanvas.current.offsetTop;
         startX = parseInt(e.clientX - offsetX);
         startY = parseInt(e.clientY - offsetY);
-        console.log(startX, startY)
         for (var i = 0; i < texts.length; i++) {
             if (textHittest(startX, startY, i)) {
                 selectedText = i;
@@ -203,24 +199,6 @@ const Canvas = (props) => {
         text.y += dy;
         draw();
     }
-    const downloadImage = (e) => {
-        let link = e.currentTarget;
-        link.setAttribute('download', 'test.png');
-        let image = finalImageCanvas.current.toDataURL('image/png');
-        link.setAttribute('href', image);
-    }
-    function sendPhotoToEmail() {
-        console.log('clicked')
-        var imgData = finalImageCanvas?.current.toDataURL('image/png');
-        postImageToEmail(imgData);
-        console.log('clicked after')
-    }
-    function saveToCollection() {
-        console.log('save to collection begin')
-        var imgData = finalImageCanvas?.current.toDataURL('image/png');
-        postImage(imgData);
-        console.log('save to collection end')
-    }
 
     return (
         <>
@@ -235,17 +213,16 @@ const Canvas = (props) => {
                         <>
                             <a id="download_image" href="some_link" onClick={(e) => {
                                 mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
-                                downloadImage(e)
-
+                                downloadImage(e, finalImageCanvas)
                             }}>
                                 <Button><FontAwesomeIcon icon={faDownload} /></Button></a>
                             <Button><FontAwesomeIcon onClick={(e) => {
                                 mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
-                                sendPhotoToEmail()
+                                sendPhotoToEmail(finalImageCanvas)
                             }} icon={faEnvelope} /></Button>
                             <Button onClick={() => {
                                 mergeCanvas(finalImageCanvas.current, canvas.current, frameCanvas.current, textCanvas.current)
-                                saveToCollection()
+                                saveToCollection(finalImageCanvas)
                             }
                             }><FontAwesomeIcon icon={faFloppyDisk} /></Button>
                         </>
@@ -257,7 +234,7 @@ const Canvas = (props) => {
             <div className='row canvas'>
                 <div className='col-10 top-wrapper-image'>
                     {isCropping ?
-                        <EasyCrop imgSource={imgSource} setImageSource={setImageSource} setIsCropping={setIsCropping} />
+                        <EasyCrop imgSource={image.imgSource} setImageSource={image.setImageSource} setIsCropping={setIsCropping} />
                         :
                         <>
                             <canvas id="canvas1" className="image" ref={canvas} width={CANVAS_WITDH} height={CANVAS_HEIGHT} />
@@ -283,23 +260,23 @@ const Canvas = (props) => {
                 </div>
                 <div className="row">
                     {frameRowOpen ?
-                        <Frames imgSource={imgSource}
+                        <Frames imgSource={image.imgSource}
                             frame={frame}
                             framePath={framePath}
                             setFramePath={setFramePath}
                             frameRow={{ frameRowOpen, setFrameRow }}
                             canvas={canvas}
                             canvasDimensions={{ CANVAS_WITDH, CANVAS_HEIGHT }}
-                            setImageSource={setImageSource} />
+                            setImageSource={image.setImageSource} />
                         :
                         <></>
                     }
                     {filtersRowOpen ?
-                        <Filters imgSource={imgSource}
+                        <Filters imgSource={image.imgSource}
                             filterClass={filterClass}
                             setFilterClass={setFilterClass}
                             filterRow={{ filtersRowOpen, setFiltersRow }}
-                            setImageSource={setImageSource}
+                            setImageSource={image.setImageSource}
                             canvas={canvas} />
                         :
                         <></>
