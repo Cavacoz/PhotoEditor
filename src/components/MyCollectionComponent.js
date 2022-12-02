@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IKImage, IKContext, IKUpload } from 'imagekitio-react';
+import { IKImage, IKContext } from 'imagekitio-react';
 import { baseUrl } from '../shared/baseUrl';
 import { fetchImages, deleteImage } from "./ApiCalls";
 import { Button } from "reactstrap";
@@ -16,7 +16,6 @@ const MyCollection = ({ auth }) => {
         fetchImages()
             .then(imgs => {
                 setImgsUrls(imgs);
-                console.log('component', imgsUrls);
             })
     }, [])
 
@@ -26,7 +25,6 @@ const MyCollection = ({ auth }) => {
         fetchImages()
             .then(imgs => {
                 setImgsUrls(imgs);
-                //console.log('component', imgsUrls);
             })
     }
 
@@ -53,6 +51,7 @@ const MyCollection = ({ auth }) => {
                                             }]}
                                         />
                                         <Button onClick={deletePhoto} value={img.url}>Del</Button>
+                                        <Button>Download</Button>
                                     </div>
                                 );
                             })}

@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Input } from 'reactstrap';
 import Canvas from './CanvasComponent';
+import { ImageContext } from '../App';
 
 const PhotoEditor = (props) => {
 
-    const [imgSource, setImgSource] = useState('');
+    const image = useContext(ImageContext);
     const [imgName, setImageName] = useState('');
 
     function handleImageInputChange(e) {
-        setImgSource(URL.createObjectURL(e.target.files[0]).toString());
+        image.setImageSource(URL.createObjectURL(e.target.files[0]).toString());
         setImageName(e.target.files[0].name)
     }
 
     function clearImage() {
-        setImgSource('');
+        image.setImageSource('');
     }
 
     return (
@@ -23,9 +24,9 @@ const PhotoEditor = (props) => {
                     <h1>Editor</h1>
                 </div>
                 <hr />
-                {imgSource ?
+                {image.imgSource ?
                     <div className="container">
-                        <Canvas auth={props.auth} imgName={imgName} imgSource={imgSource} clearImage={clearImage} />
+                        <Canvas auth={props.auth} imgName={imgName} imgSource={image.imgSource} clearImage={clearImage} />
                     </div>
                     :
                     <>
