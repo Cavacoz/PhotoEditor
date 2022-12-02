@@ -20,7 +20,6 @@ const MyCollection = ({ auth }) => {
     }, [])
 
     async function deletePhoto(e) {
-        console.log(e.target.value);
         await deleteImage(e.target.value);
         fetchImages()
             .then(imgs => {
@@ -42,7 +41,7 @@ const MyCollection = ({ auth }) => {
                             authenticationEndpoint={authenticationEndpoint}>
                             {imgsUrls.map((img) => {
                                 return (
-                                    <div className="col-3">
+                                    <div key={img.url} className="col-3">
                                         <IKImage
                                             src={`${img.url}`}
                                             transformation={[{

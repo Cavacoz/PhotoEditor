@@ -173,7 +173,6 @@ const Canvas = (props) => {
         offsetY = textCanvas.current.offsetTop;
         startX = parseInt(e.clientX - offsetX);
         startY = parseInt(e.clientY - offsetY);
-        console.log(startX, startY)
         for (var i = 0; i < texts.length; i++) {
             if (textHittest(startX, startY, i)) {
                 selectedText = i;
